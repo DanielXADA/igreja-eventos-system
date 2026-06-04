@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel Igreja</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-100">
+
+<div class="flex h-screen">
+
+  <aside class="w-64 bg-gray-900 text-gray-200 flex flex-col">
+    <div class="p-6 text-2xl font-bold border-b border-gray-700">
+      Igreja Admin
+    </div>
+
+    <nav class="flex-1 p-4 space-y-2">
+      <button onclick="mostrarSecao('dashboard')" class="menu-btn">Dashboard</button>
+      <button onclick="mostrarSecao('usuarios')" class="menu-btn">Usuários</button>
+      <button onclick="mostrarSecao('eventos')" class="menu-btn">Eventos</button>
+      <button onclick="mostrarSecao('categorias')" class="menu-btn">Categorias</button>
+      <button onclick="mostrarSecao('locais')" class="menu-btn">Locais</button>
+      <button onclick="mostrarSecao('consultas')" class="menu-btn">Consultas</button>
+    </nav>
+  </aside>
+
+  <div class="flex-1 flex flex-col">
+
+    <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-semibold">Sistema de Eventos</h1>
+      <span class="text-gray-500">Admin</span>
+    </header>
+
+    <main class="p-6 overflow-y-auto flex-1">
+
+      <section id="dashboard" class="secao">
+        <h2 class="titulo">Visão Geral</h2>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="card" id="card1"></div>
+          <div class="card" id="card2"></div>
+          <div class="card" id="card3"></div>
+        </div>
+      </section>
+
+      <section id="usuarios" class="secao hidden">
+        <h2 class="titulo">Usuários</h2>
+
+        <div class="box">
+          <input id="nomeUsuario" placeholder="Nome do usuário" class="input">
+          <button onclick="criarUsuario()" class="btn azul">Cadastrar</button>
+        </div>
+
+        <table class="tabela">
+          <thead>
+            <tr><th>Nome</th></tr>
+          </thead>
+          <tbody id="listaUsuarios"></tbody>
+        </table>
+      </section>
+
+      <section id="eventos" class="secao hidden">
+        <h2 class="titulo">Eventos</h2>
+
+        <div class="box">
+          <input id="tituloEvento" placeholder="Título do evento" class="input">
+          <button onclick="criarEvento()" class="btn verde">Cadastrar</button>
+        </div>
+
+        <table class="tabela">
+          <thead>
+            <tr><th>Título</th></tr>
+          </thead>
+          <tbody id="listaEventos"></tbody>
+        </table>
+      </section>
+
+      <section id="categorias" class="secao hidden">
+        <h2 class="titulo">Categorias</h2>
+
+        <div class="box">
+          <input id="nomeCategoria" placeholder="Nome da categoria" class="input">
+          <button onclick="criarCategoria()" class="btn roxo">Cadastrar</button>
+        </div>
+
+        <table class="tabela">
+          <thead>
+            <tr><th>Nome</th></tr>
+          </thead>
+          <tbody id="listaCategorias"></tbody>
+        </table>
+      </section>
+
+      <section id="locais" class="secao hidden">
+        <h2 class="titulo">Locais</h2>
+
+        <div class="box">
+          <input id="nomeLocal" placeholder="Nome do local" class="input">
+          <input id="cidadeLocal" placeholder="Cidade" class="input">
+          <button onclick="criarLocal()" class="btn laranja">Cadastrar</button>
+        </div>
+
+        <table class="tabela">
+          <thead>
+            <tr><th>Local</th><th>Cidade</th></tr>
+          </thead>
+          <tbody id="listaLocais"></tbody>
+        </table>
+      </section>
+
+      <section id="consultas" class="secao hidden">
+        <h2 class="titulo">Consultas NoSQL</h2>
+
+        <div class="grid md:grid-cols-2 gap-4">
+
+          <div class="box">
+            <input id="categoriaId" placeholder="ID Categoria" class="input">
+            <button onclick="buscarPorCategoria()" class="btn">Buscar por Categoria</button>
+          </div>
+
+          <div class="box">
+            <button onclick="buscarProximos()" class="btn">Próximos Eventos</button>
+          </div>
+
+          <div class="box">
+            <button onclick="buscarGrandes()" class="btn">Eventos Grandes</button>
+          </div>
+
+          <div class="box">
+            <input id="cidadeBusca" placeholder="Cidade" class="input">
+            <button onclick="buscarCidade()" class="btn">Buscar por Cidade</button>
+          </div>
+
+          <div class="box col-span-2">
+            <input id="buscaTexto" placeholder="Buscar evento" class="input w-full">
+            <button onclick="buscarTexto()" class="btn mt-2">Buscar</button>
+          </div>
+
+        </div>
+
+        <ul id="resultadoConsultas" class="mt-6 space-y-2"></ul>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<script src="dashboard.js"></script>
+</body>
+</html>
