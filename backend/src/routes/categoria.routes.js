@@ -1,12 +1,24 @@
 const express = require("express");
-const roteador = express.Router();
-const Modelo = require("../models/Categoria");
-const controleGenerico = require("../controllers/crudController");
+const router = express.Router();
+const Categoria = require("../models/Categoria");
 
-roteador.post("/", controleGenerico.criar(Modelo));
-roteador.get("/", controleGenerico.obterTodos(Modelo));
-roteador.get("/:id", controleGenerico.obterPorId(Modelo));
-roteador.put("/:id", controleGenerico.atualizar(Modelo));
-roteador.delete("/:id", controleGenerico.remover(Modelo));
+router.post("/", async (req, res) => {
+  try {
+    const novaCategoria = new Categoria(req.body);
+    await novaCategoria.save();
+    res.status(201).json({ mensagem: "Categoria salva!", dados: novaCategoria });
+  } catch (erro) {
+    res.status(400).json({ erro: erro.message });
+  }
+});
 
-module.exports = roteador;
+router.get("/", async (req, res) => {
+  try {
+    const categorias = await Categoria.find();
+    res.json(categorias);
+  } catch (erro) {
+    res.status(500).json({ erro: erro.message });
+  }
+});
+
+module.exports = router;
