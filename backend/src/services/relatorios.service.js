@@ -1,13 +1,22 @@
 const Inscricao = require("../models/Inscricao");
 const Comentario = require("../models/Comentario");
 
-const obterParticipantesPorEvento = async (requisicao, resposta) => {
+const obterParticipantesPorEvento = async (req, res) => {
   try {
     const dados = await Inscricao.aggregate([
       {
+        $match: {
+          evento: {
+            $ne: null
+          }
+        }
+      },
+      {
         $group: {
           _id: "$evento",
-          totalInscritos: { $sum: 1 }
+          totalInscritos: {
+            $sum: 1
+          }
         }
       },
       {
@@ -15,33 +24,76 @@ const obterParticipantesPorEvento = async (requisicao, resposta) => {
           from: "eventos",
           localField: "_id",
           foreignField: "_id",
-          as: "detalhes"
+          as: "evento"
         }
       },
-      { $unwind: "$detalhes" }
+      {
+        $unwind: "$evento"
+      },
+      {
+        $project: {
+          _id: 0,
+          eventoId: "$evento._id",
+          titulo: "$evento.titulo",
+          data: "$evento.data",
+          totalInscritos: 1
+        }
+      },
+      {
+        $sort: {
+          totalInscritos: -1
+        }
+      }
     ]);
-    resposta.json(dados);
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 
-const obterMediaAvaliacaoPorCategoria = async (requisicao, resposta) => {
+const obterMediaAvaliacaoPorCategoria = async (req, res) => {
   try {
     const dados = await Comentario.aggregate([
+      {
+        $match: {
+          evento: {
+            $ne: null
+          },
+          avaliacao: {
+            $type: "number"
+          }
+        }
+      },
       {
         $lookup: {
           from: "eventos",
           localField: "evento",
           foreignField: "_id",
-          as: "eventoDados"
+          as: "evento"
         }
       },
-      { $unwind: "$eventoDados" },
+      {
+        $unwind: "$evento"
+      },
+      {
+        $match: {
+          "evento.categoria": {
+            $ne: null
+          }
+        }
+      },
       {
         $group: {
-          _id: "$eventoDados.categoria",
-          mediaNota: { $avg: "$avaliacao" }
+          _id: "$evento.categoria",
+          mediaNota: {
+            $avg: "$avaliacao"
+          },
+          totalAvaliacoes: {
+            $sum: 1
+          }
         }
       },
       {
@@ -49,40 +101,93 @@ const obterMediaAvaliacaoPorCategoria = async (requisicao, resposta) => {
           from: "categorias",
           localField: "_id",
           foreignField: "_id",
-          as: "categoriaDados"
+          as: "categoria"
         }
       },
-      { $unwind: "$categoriaDados" }
+      {
+        $unwind: "$categoria"
+      },
+      {
+        $project: {
+          _id: 0,
+          categoriaId: "$categoria._id",
+          categoria: "$categoria.nome",
+          mediaNota: {
+            $round: ["$mediaNota", 2]
+          },
+          totalAvaliacoes: 1
+        }
+      },
+      {
+        $sort: {
+          mediaNota: -1
+        }
+      }
     ]);
-    resposta.json(dados);
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 
-const obterEventosMaisEngajados = async (requisicao, resposta) => {
+const obterEventosMaisEngajados = async (req, res) => {
   try {
     const dados = await Comentario.aggregate([
       {
-        $group: {
-          _id: "$evento",
-          totalComentarios: { $sum: 1 }
+        $match: {
+          evento: {
+            $ne: null
+          }
         }
       },
-      { $sort: { totalComentarios: -1 } },
+      {
+        $group: {
+          _id: "$evento",
+          totalComentarios: {
+            $sum: 1
+          }
+        }
+      },
+      {
+        $sort: {
+          totalComentarios: -1
+        }
+      },
       {
         $lookup: {
           from: "eventos",
           localField: "_id",
           foreignField: "_id",
-          as: "eventoDados"
+          as: "evento"
         }
       },
-      { $unwind: "$eventoDados" }
+      {
+        $unwind: "$evento"
+      },
+      {
+        $project: {
+          _id: 0,
+          eventoId: "$evento._id",
+          titulo: "$evento.titulo",
+          data: "$evento.data",
+          totalComentarios: 1
+        }
+      },
+      {
+        $sort: {
+          totalComentarios: -1
+        }
+      }
     ]);
-    resposta.json(dados);
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 

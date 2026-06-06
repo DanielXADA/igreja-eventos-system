@@ -1,53 +1,133 @@
+const mongoose = require("mongoose");
+
 const Evento = require("../models/Evento");
 const Local = require("../models/Local");
 
-const listarPorCategoria = async (requisicao, resposta) => {
+const listarPorCategoria = async (req, res) => {
   try {
-    const dados = await Evento.find({ categoria: requisicao.params.categoriaId });
-    resposta.json(dados);
+    const { categoriaId } = req.params;
+
+    if (!mongoose.isValidObjectId(categoriaId)) {
+      return res.status(400).json({
+        erro: "ID de categoria inválido"
+      });
+    }
+
+    const dados = await Evento.find({
+      categoria: categoriaId
+    })
+      .sort({ data: 1 })
+      .populate("categoria")
+      .populate("local");
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 
-const listarProximosEventos = async (requisicao, resposta) => {
+const listarProximosEventos = async (req, res) => {
   try {
-    const dados = await Evento.find({ data: { $gte: new Date() } });
-    resposta.json(dados);
+    const dados = await Evento.find({
+      data: {
+        $gte: new Date()
+      }
+    })
+      .sort({ data: 1 })
+      .populate("categoria")
+      .populate("local");
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 
-const listarEventosAtivosEGrandes = async (requisicao, resposta) => {
+const listarEventosAtivosEGrandes = async (req, res) => {
   try {
     const dados = await Evento.find({
       $and: [
-        { inscricoesAbertas: true },
-        { capacidade: { $gt: 100 } }
+        {
+          inscricoesAbertas: true
+        },
+        {
+          capacidade: {
+            $gt: 100
+          }
+        }
       ]
+    })
+      .sort({ data: 1 })
+      .populate("categoria")
+      .populate("local");
+
+    return res.status(200).json(dados);
+  } catch (erro) {
+    return res.status(500).json({
+      erro: erro.message
     });
-    resposta.json(dados);
-  } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
   }
 };
 
-const listarLocaisPorCidade = async (requisicao, resposta) => {
+const listarLocaisPorCidade = async (req, res) => {
   try {
-    const dados = await Local.find({ "endereco.cidade": requisicao.params.cidade });
-    resposta.json(dados);
+    const cidade = req.params.cidade.trim();
+
+    if (!cidade) {
+      return res.status(400).json({
+        erro: "A cidade é obrigatória"
+      });
+    }
+
+    const dados = await Local.find({
+      "endereco.cidade": {
+        $regex: `^${cidade}$`,
+        $options: "i"
+      }
+    }).sort({ nome: 1 });
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 
-const buscarEventoPorTermo = async (requisicao, resposta) => {
+const buscarEventoPorTermo = async (req, res) => {
   try {
-    const dados = await Evento.find({ titulo: { $regex: requisicao.query.busca, $options: "i" } });
-    resposta.json(dados);
+    const termo = String(req.query.busca || "").trim();
+
+    if (termo.length < 2) {
+      return res.status(400).json({
+        erro: "Informe pelo menos 2 caracteres para a busca"
+      });
+    }
+
+    const termoEscapado = termo.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+    );
+
+    const dados = await Evento.find({
+      titulo: {
+        $regex: termoEscapado,
+        $options: "i"
+      }
+    })
+      .sort({ data: 1 })
+      .populate("categoria")
+      .populate("local");
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 };
 

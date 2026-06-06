@@ -1,50 +1,74 @@
-const criar = (Modelo) => async (requisicao, resposta) => {
+const criar = (Modelo) => async (req, res) => {
   try {
-    const dados = await Modelo.create(requisicao.body);
-    resposta.status(201).json(dados);
+    const dados = await Modelo.create(req.body);
+    return res.status(201).json(dados);
   } catch (erro) {
-    resposta.status(400).json({ erro: erro.message });
+    return res.status(400).json({ erro: erro.message });
   }
 };
 
-const obterTodos = (Modelo) => async (requisicao, resposta) => {
+const obterTodos = (Modelo) => async (req, res) => {
   try {
     const dados = await Modelo.find();
-    resposta.json(dados);
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(500).json({ erro: erro.message });
+    return res.status(500).json({ erro: erro.message });
   }
 };
 
-const obterPorId = (Modelo) => async (requisicao, resposta) => {
+const obterPorId = (Modelo) => async (req, res) => {
   try {
-    const dados = await Modelo.findById(requisicao.params.id);
-    resposta.json(dados);
+    const dados = await Modelo.findById(req.params.id);
+
+    if (!dados) {
+      return res.status(404).json({ erro: "Registro não encontrado" });
+    }
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(404).json({ erro: "Não encontrado" });
+    return res.status(400).json({ erro: "ID inválido" });
   }
 };
 
-const atualizar = (Modelo) => async (requisicao, resposta) => {
+const atualizar = (Modelo) => async (req, res) => {
   try {
     const dados = await Modelo.findByIdAndUpdate(
-      requisicao.params.id,
-      requisicao.body,
-      { new: true }
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true
+      }
     );
-    resposta.json(dados);
+
+    if (!dados) {
+      return res.status(404).json({ erro: "Registro não encontrado" });
+    }
+
+    return res.status(200).json(dados);
   } catch (erro) {
-    resposta.status(400).json({ erro: erro.message });
+    return res.status(400).json({ erro: erro.message });
   }
 };
 
-const remover = (Modelo) => async (requisicao, resposta) => {
+const remover = (Modelo) => async (req, res) => {
   try {
-    await Modelo.findByIdAndDelete(requisicao.params.id);
-    resposta.json({ mensagem: "Removido com sucesso" });
+    const dados = await Modelo.findByIdAndDelete(req.params.id);
+
+    if (!dados) {
+      return res.status(404).json({ erro: "Registro não encontrado" });
+    }
+
+    return res.status(200).json({ mensagem: "Removido com sucesso" });
   } catch (erro) {
-    resposta.status(400).json({ erro: erro.message });
+    return res.status(400).json({ erro: "ID inválido" });
   }
 };
 
-module.exports = { criar, obterTodos, obterPorId, atualizar, remover };
+module.exports = {
+  criar,
+  obterTodos,
+  obterPorId,
+  atualizar,
+  remover
+};

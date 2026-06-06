@@ -1,24 +1,41 @@
 const express = require("express");
-const router = express.Router();
-const Categoria = require("../models/Categoria");
 
-router.post("/", async (req, res) => {
-  try {
-    const novaCategoria = new Categoria(req.body);
-    await novaCategoria.save();
-    res.status(201).json({ mensagem: "Categoria salva!", dados: novaCategoria });
-  } catch (erro) {
-    res.status(400).json({ erro: erro.message });
-  }
-});
+const roteador = express.Router();
 
-router.get("/", async (req, res) => {
-  try {
-    const categorias = await Categoria.find();
-    res.json(categorias);
-  } catch (erro) {
-    res.status(500).json({ erro: erro.message });
-  }
-});
+const Modelo = require("../models/Categoria");
+const controleGenerico = require("../controllers/crudController");
+const autenticar = require("../middlewares/autenticacao");
+const autorizar = require("../middlewares/autorizacao");
 
-module.exports = router;
+roteador.post(
+  "/",
+  autenticar,
+  autorizar("admin", "pastor", "lider"),
+  controleGenerico.criar(Modelo)
+);
+
+roteador.get(
+  "/",
+  controleGenerico.obterTodos(Modelo)
+);
+
+roteador.get(
+  "/:id",
+  controleGenerico.obterPorId(Modelo)
+);
+
+roteador.put(
+  "/:id",
+  autenticar,
+  autorizar("admin", "pastor", "lider"),
+  controleGenerico.atualizar(Modelo)
+);
+
+roteador.delete(
+  "/:id",
+  autenticar,
+  autorizar("admin", "pastor"),
+  controleGenerico.remover(Modelo)
+);
+
+module.exports = roteador;

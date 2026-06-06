@@ -1,24 +1,50 @@
 const express = require("express");
-const router = express.Router();
-const Noticia = require("../models/Noticia");
 
-router.post("/", async (req, res) => {
+const roteador = express.Router();
+
+const Modelo = require("../models/Noticia");
+const controleGenerico = require("../controllers/crudController");
+const autenticar = require("../middlewares/autenticacao");
+const autorizar = require("../middlewares/autorizacao");
+
+roteador.post(
+  "/",
+  autenticar,
+  autorizar("admin", "pastor", "lider"),
+  controleGenerico.criar(Modelo)
+);
+
+roteador.get("/", async (req, res) => {
   try {
-    const novaNoticia = new Noticia(req.body);
-    await novaNoticia.save();
-    res.status(201).json({ mensagem: "Notícia salva com sucesso!", dados: novaNoticia });
+    const noticias = await Modelo.find().sort({
+      createdAt: -1
+    });
+
+    return res.status(200).json(noticias);
   } catch (erro) {
-    res.status(400).json({ erro: erro.message });
+    return res.status(500).json({
+      erro: erro.message
+    });
   }
 });
 
-router.get("/", async (req, res) => {
-  try {
-    const noticias = await Noticia.find().sort({ createdAt: -1 });
-    res.json(noticias);
-  } catch (erro) {
-    res.status(500).json({ erro: erro.message });
-  }
-});
+roteador.get(
+  "/:id",
+  controleGenerico.obterPorId(Modelo)
+);
 
-module.exports = router;
+roteador.put(
+  "/:id",
+  autenticar,
+  autorizar("admin", "pastor", "lider"),
+  controleGenerico.atualizar(Modelo)
+);
+
+roteador.delete(
+  "/:id",
+  autenticar,
+  autorizar("admin", "pastor"),
+  controleGenerico.remover(Modelo)
+);
+
+module.exports = roteador;
