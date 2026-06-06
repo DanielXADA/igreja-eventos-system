@@ -1,0 +1,281 @@
+/* Configurações Globais e Paleta de Cores */
+:root {
+    --primary-color: #1a2e40;       /* Azul Escuro / Marinho */
+    --secondary-color: #d4af37;     /* Dourado */
+    --text-color: #333333;
+    --text-light: #666666;
+    --bg-light: #f4f7f9;
+    --white: #ffffff;
+    --error-color: #d9534f;
+    --success-color: #2b8a3e;
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-light);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Container Principal (Layout em Dois Blocos) */
+.login-container {
+    background-color: var(--white);
+    width: 100%;
+    max-width: 950px;
+    height: 600px;
+    display: flex;
+    border-radius: calc(var(--radius) * 2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Lado Esquerdo: Banner Lateral */
+.login-sidebar {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0f1b26 100%);
+    color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+}
+
+/* Detalhe estético no fundo do banner */
+.login-sidebar::before {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 2px solid rgba(212, 175, 55, 0.1);
+    border-radius: 50%;
+    top: -50px;
+    left: -50px;
+}
+
+.sidebar-content .church-icon {
+    font-size: 4rem;
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+.sidebar-content h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-content p {
+    color: #b0c4de;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Lado Direito: Área do Formulário */
+.login-form-area {
+    flex: 1.2;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-header {
+    margin-bottom: 30px;
+}
+
+.form-header h1 {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.form-header p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+/* Inputs e Elementos do Formulário */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    color: #a0aec0;
+    font-size: 1.1rem;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-wrapper input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(26, 46, 64, 0.1);
+}
+
+/* Ícone de olho para mostrar senha */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    color: #a0aec0;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: var(--primary-color);
+}
+
+/* Opções (Lembrar e Esqueceu a senha) */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.88rem;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Caixa de Mensagens Dinâmicas */
+.message-box {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    display: none;
+    text-align: center;
+}
+
+.message-box.error {
+    display: block;
+    background-color: #fde8e8;
+    color: var(--error-color);
+    border: 1px solid #f8b4b4;
+}
+
+.message-box.success {
+    display: block;
+    background-color: #eaf5ea;
+    color: var(--success-color);
+    border: 1px solid #b7e1cd;
+}
+
+/* Botão de Envio */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(26, 46, 64, 0.15);
+}
+
+.btn-submit:hover {
+    background-color: #24415a;
+    transform: translateY(-1px);
+}
+
+/* Rodapé do Formulário */
+.form-footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.form-footer a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsividade para Telas Menores (Celulares) */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .login-sidebar {
+        padding: 40px 20px;
+    }
+
+    .sidebar-content .church-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+
+    .sidebar-content h2 {
+        font-size: 1.6rem;
+    }
+
+    .login-form-area {
+        padding: 30px 20px;
+    }
+}
