@@ -15,6 +15,7 @@ app.use("/api/locais", require("./routes/local.routes"));
 app.use("/api/voluntarios", require("./routes/voluntario.routes"));
 app.use("/api/doacoes", require("./routes/doacao.routes"));
 app.use("/api/notificacoes", require("./routes/notificacao.routes"));
+app.use("/api/noticias", require("./routes/noticia.routes"));
 
 app.use("/api/consultas", require("./routes/consulta.routes"));
 app.use("/api/relatorios", require("./routes/relatorio.routes"));
