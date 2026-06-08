@@ -37,19 +37,28 @@
     .form-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.15); border-color: #818cf8; }
     .form-input-green:focus { outline: none; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); border-color: #34d399; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee { display: flex; animation: marquee 25s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; }
   </style>
 </head>
 <body class="bg-gray-50 antialiased">
 <div class="flex h-screen overflow-hidden">
-  <aside class="w-64 bg-slate-900 flex flex-col flex-shrink-0 overflow-y-auto">
+  <aside id="sidebar-container" class="w-64 bg-slate-900 flex flex-col flex-shrink-0 overflow-y-auto transition-all duration-300">
     <div class="px-5 py-5 border-b border-slate-700/60">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-          <i data-lucide="building-2" class="w-5 h-5 text-white"></i>
-        </div>
-        <div>
-          <h1 class="font-display font-semibold text-white text-sm leading-tight tracking-wide">Igreja Nova Vida</h1>
-          <p class="text-[11px] text-slate-500 mt-0.5">Gestão Eclesiástica · UNAMA</p>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+            <i data-lucide="building-2" class="w-5 h-5 text-white"></i>
+          </div>
+          <div>
+            <h1 class="font-display font-semibold text-white text-sm leading-tight tracking-wide">Igreja Nova Vida</h1>
+            <p class="text-[11px] text-slate-500 mt-0.5">Gestão Eclesiástica · UNAMA</p>
+          </div>
         </div>
       </div>
     </div>
@@ -113,9 +122,7 @@
     </nav>
     <div class="px-4 py-4 border-t border-slate-700/60 flex flex-col gap-2">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-indigo-600/30 border border-indigo-500/30 rounded-full flex items-center justify-center flex-shrink-0">
-          <i data-lucide="user" class="w-4 h-4 text-indigo-400"></i>
-        </div>
+        <img id="sidebar-user-avatar" src="" class="w-9 h-9 rounded-full object-cover border border-slate-700 shadow-sm flex-shrink-0" />
         <div class="flex-1 min-w-0">
           <p id="sidebar-user-name" class="text-xs font-semibold text-white truncate">Carregando...</p>
           <p id="sidebar-user-email" class="text-[10px] text-slate-400 truncate">...</p>
@@ -133,9 +140,20 @@
 
   <div class="flex-1 flex flex-col overflow-hidden">
     <header class="bg-white border-b border-gray-200/80 px-6 py-3.5 flex items-center justify-between flex-shrink-0 shadow-sm">
-      <div>
-        <h2 id="page-title" class="font-display font-semibold text-slate-800 text-lg leading-tight">Dashboard</h2>
-        <p id="page-subtitle" class="text-xs text-slate-400 mt-0.5">Visão geral do sistema</p>
+      <div class="flex items-center gap-4">
+        <button id="btn-toggle-sidebar" class="text-slate-600 hover:bg-gray-100 p-1.5 rounded-lg transition-colors">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div>
+          <h2 id="page-title" class="font-display font-semibold text-slate-800 text-lg leading-tight">Dashboard</h2>
+          <p id="page-subtitle" class="text-xs text-slate-400 mt-0.5">Visão geral do sistema</p>
+        </div>
+      </div>
+      <div class="relative">
+        <button id="btn-sino-notificacao" onclick="irParaSecaoRapido('notificacoes')" class="relative text-slate-600 hover:bg-gray-100 p-2 rounded-lg transition-colors flex items-center justify-center">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span id="badge-notificacao-contador" class="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white font-bold text-[9px] rounded-full flex items-center justify-center hidden">0</span>
+        </button>
       </div>
     </header>
 
@@ -216,38 +234,79 @@
             <div id="news-feed-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
           </div>
         </div>
+
+        <div class="grid grid-cols-1 gap-5 mt-6">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 overflow-hidden">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
+                <i data-lucide="message-circle" class="w-4 h-4 text-amber-500"></i>
+              </div>
+              <h3 class="font-semibold text-slate-700 text-sm">Testemunhos e Experiências da Comunidade</h3>
+            </div>
+            <div class="relative w-full overflow-hidden h-20 bg-gray-50/60 rounded-xl border border-gray-100/70 flex items-center">
+              <div id="dashboard-testimonies-marquee" class="flex gap-6 whitespace-nowrap animate-marquee px-4 py-2 text-xs text-slate-600">
+                <span class="inline-block bg-white px-4 py-2 rounded-lg border border-gray-100 shadow-sm">Carregando abençoados testemunhos...</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="sec-perfil" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div class="flex items-center gap-3 mb-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 xl:col-span-2 space-y-6">
+            <div class="flex items-center gap-3 border-b border-gray-100 pb-4">
               <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
                 <i data-lucide="user"></i>
               </div>
               <div>
                 <h3 class="font-semibold text-slate-800 text-base">Meus Dados Cadastrais</h3>
-                <p class="text-xs text-slate-400">Informações registradas no banco de dados</p>
+                <p class="text-xs text-slate-400">Atualize suas informações de contato e redes sociais</p>
               </div>
             </div>
-            <div class="space-y-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 uppercase">Nome Completo</label>
-                <p id="profile-display-name" class="text-sm font-medium text-slate-700 mt-1">Carregando...</p>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 uppercase">E-mail de Acesso</label>
-                <p id="profile-display-email" class="text-sm font-medium text-slate-700 mt-1">Carregando...</p>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 uppercase">Nível de Acesso Atual</label>
-                <div class="mt-1">
-                  <span id="profile-display-rank" class="inline-block px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-600 rounded-full">...</span>
+            <form id="form-perfil-atualizar" class="space-y-4">
+              <div class="flex flex-col sm:flex-row items-center gap-4 bg-gray-50/50 p-4 rounded-xl border border-gray-100 mb-2">
+                <img id="profile-avatar-preview" src="" class="w-16 h-16 rounded-full object-cover border-2 border-indigo-500 shadow-sm flex-shrink-0" />
+                <div class="flex-1 w-full">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">URL da Foto de Perfil</label>
+                  <input id="input-perfil-foto" placeholder="Cole o link de uma imagem da internet" class="form-input w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white" />
                 </div>
               </div>
-            </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Nome Completo</label>
+                  <input id="input-perfil-nome" required class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Telefone</label>
+                  <input id="input-perfil-telefone" placeholder="(91) 99999-9999" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white" />
+                </div>
+              </div>
+              <div class="border-t border-gray-100 pt-4">
+                <p class="text-[11px] font-bold text-indigo-500 uppercase tracking-wider mb-3">Redes Sociais Paroquiais</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="flex items-center gap-1 text-xs font-semibold text-slate-500 mb-1"><i data-lucide="instagram" class="w-3.5 h-3.5 text-pink-500"></i> Instagram</label>
+                    <input id="input-perfil-instagram" placeholder="@usuario" class="form-input w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white" />
+                  </div>
+                  <div>
+                    <label class="flex items-center gap-1 text-xs font-semibold text-slate-500 mb-1"><i data-lucide="facebook" class="w-3.5 h-3.5 text-blue-600"></i> Facebook</label>
+                    <input id="input-perfil-facebook" placeholder="fb.com/usuario" class="form-input w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white" />
+                  </div>
+                  <div>
+                    <label class="flex items-center gap-1 text-xs font-semibold text-slate-500 mb-1"><i data-lucide="youtube" class="w-3.5 h-3.5 text-red-600"></i> YouTube</label>
+                    <input id="input-perfil-youtube" placeholder="youtube.com/canal" class="form-input w-full px-3 py-2 text-xs border border-gray-200 rounded-lg bg-white" />
+                  </div>
+                </div>
+              </div>
+              <div class="pt-2">
+                <button type="submit" class="px-6 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 rounded-lg shadow-sm transition-colors">
+                  Salvar Alterações
+                </button>
+              </div>
+            </form>
           </div>
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div id="card-simulador" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start hidden">
             <div class="flex items-center gap-3 mb-4">
               <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
                 <i data-lucide="shield-alert"></i>
@@ -298,11 +357,11 @@
               </div>
               <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Função / Cargo</label>
-                <select name="funcao" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white">
+                <select id="select-funcao-usuario" name="funcao" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white">
                   <option value="membro">🐑 Membro comum</option>
                   <option value="lider">👔 Líder de Ministério</option>
                   <option value="pastor">⛪ Pastor / Clero</option>
-                  <option value="admin">👑 Administrador</option>
+                  <option id="option-funcao-admin" value="admin">👑 Administrador</option>
                 </select>
               </div>
               <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
@@ -323,6 +382,7 @@
                     <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">E-mail</th>
                     <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Telefone</th>
                     <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Função</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
                   </tr>
                 </thead>
                 <tbody id="usuarios-tbody"></tbody>
@@ -341,8 +401,38 @@
             </h3>
             <form id="form-evento" class="space-y-4">
               <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Nome do Evento *</label>
-                <input name="nome" required placeholder="Ex: Retiro de Jovens 2025" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Título do Evento *</label>
+                <input name="titulo" required placeholder="Ex: Retiro de Jovens 2025" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Descrição</label>
+                <textarea name="descricao" placeholder="Detalhes do evento..." class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Categoria *</label>
+                <div class="flex gap-2">
+                  <select id="select-evento-categoria" name="categoria" required class="form-input flex-1 px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+                  <button type="button" id="btn-add-categoria-rapido" onclick="irParaSecaoRapido('categorias')" class="px-3 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition-colors flex items-center justify-center hidden">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Local de Realização *</label>
+                <div class="flex gap-2">
+                  <select id="select-evento-local" name="local" required class="form-input flex-1 px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+                  <button type="button" id="btn-add-local-rapido" onclick="irParaSecaoRapido('locais')" class="px-3 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg border border-indigo-200 transition-colors flex items-center justify-center hidden">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Data do Evento *</label>
+                <input type="datetime-local" name="data" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Capacidade Máxima *</label>
+                <input type="number" name="capacidade" required min="1" placeholder="Ex: 100" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
               </div>
               <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
                 Cadastrar Evento
@@ -355,6 +445,14 @@
             </div>
             <div class="overflow-x-auto">
               <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Título</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Data</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Capacidade</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
+                  </tr>
+                </thead>
                 <tbody id="eventos-tbody"></tbody>
               </table>
             </div>
@@ -362,15 +460,428 @@
         </div>
       </section>
 
-      <section id="sec-categorias" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Categorias</div></section>
-      <section id="sec-locais" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Locais</div></section>
-      <section id="sec-ministerios" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Ministérios</div></section>
-      <section id="sec-inscricoes" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Inscrições</div></section>
-      <section id="sec-voluntarios" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Voluntários</div></section>
-      <section id="sec-comentarios" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Comentários</div></section>
-      <section id="sec-doacoes" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Doações</div></section>
-      <section id="sec-notificacoes" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Notificações</div></section>
-      <section id="sec-relatorios" class="hidden fade-in"><div class="bg-white p-6 rounded-xl border border-gray-100 text-sm text-slate-500">Painel de Relatórios</div></section>
+      <section id="sec-categorias" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="tag" class="w-4 h-4 text-indigo-500"></i>
+              Nova Categoria
+            </h3>
+            <form id="form-categoria" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Nome da Categoria *</label>
+                <input name="nome" required placeholder="Ex: Retiros" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Descrição</label>
+                <textarea name="descricao" placeholder="Breve resumo..." class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Salvar Categoria
+              </button>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Categorias Registadas</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nome</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Descrição</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="categorias-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-locais" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="map-pin" class="w-4 h-4 text-indigo-500"></i>
+              <span id="titulo-form-local">Novo Local</span>
+            </h3>
+            <form id="form-local" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Nome do Local *</label>
+                <input name="nome" required placeholder="Ex: Auditório Paroquial" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Capacidade Máxima *</label>
+                <input type="number" name="capacidade" required min="1" placeholder="Ex: 250" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div class="border-t border-gray-100 pt-2 mt-2">
+                <p class="text-[10px] font-bold text-indigo-500 uppercase tracking-wider mb-2">Endereço Automatizado</p>
+                <div class="mb-2">
+                  <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">CEP *</label>
+                  <input id="input-local-cep" name="cep" required placeholder="00000-000" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-indigo-50/30 font-mono focus:bg-white" />
+                </div>
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                  <div class="col-span-2">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Rua</label>
+                    <input name="rua" placeholder="Rua / Avenida" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-100" readonly />
+                  </div>
+                  <div>
+                    <div class="flex justify-between items-center mb-1">
+                      <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide">Número *</label>
+                      <label class="inline-flex items-center text-[10px] text-slate-400 gap-1 cursor-pointer select-none font-bold">
+                        <input type="checkbox" id="chk-local-sn" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 w-3 h-3" />
+                        S/N
+                      </label>
+                    </div>
+                    <input id="input-local-numero" name="numero" required placeholder="Nº" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Bairro</label>
+                    <input name="bairro" placeholder="Bairro" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-100" readonly />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Cidade</label>
+                    <input name="cidade" placeholder="Cidade" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-100" readonly />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide">Estado</label>
+                    <input name="estado" placeholder="UF" class="form-input w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-100 text-center font-mono" readonly />
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2 mt-2">
+                <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                  Salvar Local
+                </button>
+                <button type="button" id="btn-cancelar-local" class="px-4 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-medium rounded-lg border border-gray-200 transition-colors hidden">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Locais Registados</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nome</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Capacidade</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cidade / UF</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="locais-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-ministerios" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="music" class="w-4 h-4 text-indigo-500"></i>
+              Novo Ministério
+            </h3>
+            <form id="form-ministerio" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Nome do Ministério *</label>
+                <input name="nome" required placeholder="Ex: Ministério de Música" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Descrição</label>
+                <textarea name="descricao" placeholder="Finalidade..." class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Salvar Ministério
+              </button>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Ministérios Existentes</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nome</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Descrição</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="ministerios-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-inscricoes" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div id="container-form-inscricao" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="clipboard-list" class="w-4 h-4 text-indigo-500"></i>
+              Registrar Inscrição
+            </h3>
+            <form id="form-inscricao" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Selecione o Evento *</label>
+                <select id="select-inscricao-evento" name="evento" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div id="box-select-inscricao-usuario">
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Selecione o Membro *</label>
+                <select id="select-inscricao-usuario" name="usuario" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Confirmar Vaga no Evento
+              </button>
+            </form>
+          </div>
+          <div id="container-tbl-inscricao" class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Controle de Presença / Check-in</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Membro</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Eventos</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider">Check-in</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="inscricoes-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-voluntarios" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="heart" class="w-4 h-4 text-indigo-500"></i>
+              Escalar Servidor
+            </h3>
+            <form id="form-voluntario" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Selecione o Evento *</label>
+                <select id="select-voluntario-evento" name="evento" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Selecione o Voluntário *</label>
+                <select id="select-voluntario-usuario" name="usuario" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Função / Posto de Serviço *</label>
+                <input name="funcao" required placeholder="Ex: Equipe de Som, Acolhimento" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Confirmar na Escala
+              </button>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Escala Operacional de Eventos</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Voluntário</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Evento</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Função designada</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Remover</th>
+                  </tr>
+                </thead>
+                <tbody id="voluntarios-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-comentarios" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="message-square" class="w-4 h-4 text-indigo-500"></i>
+              Enviar Testemunho / Feedback
+            </h3>
+            <form id="form-comentario" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Selecione o Evento que participou *</label>
+                <select id="select-comentario-evento" name="evento" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Avaliação da Experiência *</label>
+                <input type="hidden" id="input-comentario-avaliacao" name="avaliacao" value="5" required />
+                <div id="star-rating-container" class="flex items-center gap-1 mt-1 text-slate-300">
+                  <button type="button" data-star="1" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="2" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="3" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="4" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="5" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Sua Mensagem / Nota pastoral *</label>
+                <textarea name="mensagem" required placeholder="Escreva aqui..." class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white h-24"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Publicar Mensagem
+              </button>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Mural de Feedbacks e Mensagens</h3>
+            </div>
+            <div id="comentarios-mural-container" class="p-6 space-y-4 max-h-[550px] overflow-y-auto"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-doacoes" class="hidden fade-in">
+        <div id="view-financeiro-admin" class="grid grid-cols-1 xl:grid-cols-3 gap-5 hidden">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="banknote" class="w-4 h-4 text-emerald-500"></i>
+              Registrar Entrada Contábil
+            </h3>
+            <form id="form-doacao" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Evento Vinculado</label>
+                <select id="select-doacao-evento" name="evento" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Tipo de Contribuição *</label>
+                <select name="tipo" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white">
+                  <option value="dinheiro">💵 Financeiro (Dízimo / Oferta)</option>
+                  <option value="alimento">🍞 Alimentos / Cesta Básica</option>
+                  <option value="ingresso">🎟️ Bilheteria / Ingressos</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Valor monetário (R$) *</label>
+                <input type="number" name="valor" step="0.01" required placeholder="0.00" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Identificação / Observação</label>
+                <input name="descricao" placeholder="Ex: Oferta anônima, Dízimo Geral" class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white" />
+              </div>
+              <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Confirmar Lançamento
+              </button>
+            </form>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-2 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Histórico do Caixa Local</h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Origem / Destinação</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Categoria</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-bold text-slate-400 uppercase tracking-wider">Valor líquido</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider w-24">Remover</th>
+                  </tr>
+                </thead>
+                <tbody id="doacoes-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="view-financeiro-membro" class="max-w-xl mx-auto bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center space-y-6 hidden">
+          <div class="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+            <i data-lucide="qr-code" class="w-8 h-8"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-slate-800 text-xl">Ofertas &amp; Dízimos Paroquiais</h3>
+            <p class="text-xs text-slate-400 mt-1">Contribua de forma segura e apoie as obras sociais da nossa paróquia</p>
+          </div>
+          <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 font-mono text-sm text-slate-700 select-all cursor-pointer">
+            pix@igrejanovavida.com.br
+          </div>
+          <p class="text-[11px] text-slate-400">Banco Cooperativo Sicredi · Agência 0001 · C/C 12345-6</p>
+        </div>
+      </section>
+
+      <section id="sec-notificacoes" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <div id="container-envio-notificacao" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 self-start hidden">
+            <h3 class="font-semibold text-slate-700 mb-5 flex items-center gap-2 text-sm">
+              <i data-lucide="send" class="w-4 h-4 text-indigo-500"></i>
+              Disparar Comunicado Geral
+            </h3>
+            <form id="form-notificacao" class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Membro de Destino *</label>
+                <select id="select-notificacao-usuario" name="usuario" required class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">Mensagem de Alerta *</label>
+                <textarea name="mensagem" required placeholder="Descreva o comunicado ou aviso urgente..." class="form-input w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50/50 hover:bg-white h-24"></textarea>
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-lg shadow-sm">
+                Disparar Alerta Notificação
+              </button>
+            </form>
+          </div>
+          <div id="container-caixa-notificacao" class="bg-white rounded-xl shadow-sm border border-gray-100 xl:col-span-3 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-gray-100">
+              <h3 class="font-semibold text-slate-700 text-sm">Minha Caixa de Avisos &amp; Notificações</h3>
+            </div>
+            <div id="notificacoes-list-container" class="divide-y divide-gray-100"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-relatorios" class="hidden fade-in">
+        <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div>
+              <h3 class="font-display font-bold text-slate-800 text-lg">Consolidado Eclesiástico Anual</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Indicadores de desempenho e engajamento da comunidade</p>
+            </div>
+            <button onclick="window.print()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-2 transition-colors">
+              <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Balanço
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="border border-gray-100 rounded-xl p-5 bg-gray-50/40 text-center">
+              <p class="text-2xl font-bold text-indigo-600 font-display">94%</p>
+              <p class="text-xs font-semibold text-slate-700 mt-1">Taxa de Assiduidade</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">Frequência média registrada nos check-ins</p>
+            </div>
+            <div class="border border-gray-100 rounded-xl p-5 bg-gray-50/40 text-center">
+              <p class="text-2xl font-bold text-emerald-600 font-display">12.4 kg</p>
+              <p class="text-xs font-semibold text-slate-700 mt-1">Alimentos p/ Membro</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">Média ponderada de arrecadação social</p>
+            </div>
+            <div class="border border-gray-100 rounded-xl p-5 bg-gray-50/40 text-center">
+              <p class="text-2xl font-bold text-amber-600 font-display">+32%</p>
+              <p class="text-xs font-semibold text-slate-700 mt-1">Crescimento de Escala</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">Novos voluntários integrados este mês</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>

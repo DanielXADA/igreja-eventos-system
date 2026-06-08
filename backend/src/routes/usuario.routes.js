@@ -102,7 +102,7 @@ roteador.post("/", async (req, res) => {
 roteador.get(
   "/",
   autenticar,
-  autorizar("admin"),
+  autorizar("admin","pastor"),
   controleGenerico.obterTodos(Modelo)
 );
 
@@ -169,7 +169,7 @@ roteador.put(
 roteador.delete(
   "/:id",
   autenticar,
-  autorizar("admin"),
+  autorizar("admin","pastor"),
   controleGenerico.remover(Modelo)
 );
 
