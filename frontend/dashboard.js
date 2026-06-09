@@ -498,17 +498,23 @@ async function carregarSeletoresGlobais() {
       }
     });
 
-    const idsSeletoresUsuarios = [
-      "select-inscricao-usuario",
-      "select-voluntario-usuario",
-      "select-notificacao-usuario"
-    ];
-    idsSeletoresUsuarios.forEach(id => {
-      const sel = document.getElementById(id);
-      if (sel) {
-        sel.innerHTML = usuarios.map(u => `<option value="${u._id}">${u.nome} (${u.tipo})</option>`).join("");
-      }
-    });
+    const selInscricaoUser = document.getElementById("select-inscricao-usuario");
+    if (selInscricaoUser) {
+      const participantesValidos = usuarios.filter(u => u.tipo !== "admin" && u.tipo !== "pastor");
+      selInscricaoUser.innerHTML = participantesValidos.map(u => `<option value="${u._id}">${u.nome} (${u.tipo})</option>`).join("");
+    }
+
+    const selVoluntarioUser = document.getElementById("select-voluntario-usuario");
+    if (selVoluntarioUser) {
+      const trabalhadoresValidos = usuarios.filter(u => u.tipo !== "admin" && u.tipo !== "pastor");
+      selVoluntarioUser.innerHTML = trabalhadoresValidos.map(u => `<option value="${u._id}">${u.nome} (${u.tipo})</option>`).join("");
+    }
+
+    const selNotif = document.getElementById("select-notificacao-usuario");
+    if (selNotif) {
+      selNotif.innerHTML = usuarios.map(u => `<option value="${u._id}">${u.nome} (${u.tipo})</option>`).join("");
+    }
+
   } catch (err) {
     console.error(err);
   }
@@ -742,7 +748,7 @@ async function listarComentarios() {
         const estrelasHtml = "★".repeat(nota) + "☆".repeat(5 - nota);
 
         return `
-        <div class="p-4 rounded-xl border border-gray-100 bg-gray-50/40 relative space-y-2">
+        <div class="layout-card-feedback-item relative space-y-2">
           <div class="flex items-center justify-between">
             <div>
               <p class="text-xs font-semibold text-slate-700">${c.usuario?.nome || "Participante"}</p>
