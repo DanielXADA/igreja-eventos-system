@@ -3,104 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Eventos - Paróquia Santa Maria</title>
+    <title>Portal de Eventos - Paróquia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-sidebar">
-            <div class="sidebar-content">
-                <i class="fa-solid fa-church church-icon"></i>
-                <h2>Portal de Eventos</h2>
-                <p>Participe dos nossos encontros, retiros e celebrações. Conecte-se com a nossa comunidade!</p>
-            </div>
-        </div>
 
-        <div class="login-form-area">
-            <div id="area-login">
-                <div class="form-header">
-                    <h1>Bem-vindo</h1>
-                    <p>Faça login para gerenciar suas inscrições</p>
+    <div class="animated-background"></div>
+
+    <main class="editorial-container">
+        <section class="left-panel">
+            <header class="minimal-header">
+                <div class="logo">
+                    <div class="logo-icon-wrapper">
+                        <i class="fa-solid fa-church logo-icon"></i>
+                    </div>
+                    <span class="logo-text">PARÓQUIA SANTA MARIA</span>
                 </div>
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="input-group">
-                        <label for="email">E-mail</label>
-                        <div class="input-wrapper">
-                            <i class="fa-regular fa-envelope input-icon"></i>
-                            <input type="email" id="email" placeholder="exemplo@email.com" required>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="password">Senha</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-lock input-icon"></i>
-                            <input type="password" id="password" placeholder="Sua senha" required>
-                            <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
-                        </div>
-                    </div>
-                    <div class="form-options">
-                        <label class="remember-me">
-                            <input type="checkbox" id="remember"> Lembrar-me
-                        </label>
-                        <a href="#" class="forgot-password" onclick="handleForgotPassword()">Esqueceu a senha?</a>
-                    </div>
-                    <div id="messageBox" class="message-box"></div>
-                    <button type="submit" class="btn-submit">
-                        <span>Entrar</span>
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </button>
-                </form>
-                <div class="form-footer">
-                    <p>Novo por aqui? <a href="#" onclick="alternarTelas(true)">Criar uma conta paroquial</a></p>
-                </div>
+            </header>
+
+            <div class="editorial-text-block">
+                <h1>
+                    Encontre sua <span class="arrow-line"></span> <br>
+                    <span class="italic-serif">Paz</span>
+                    <img src="https://i.pinimg.com/736x/c2/29/d7/c229d7397c386c43cae0c0866b2291b9.jpg" alt="Paróquia" class="inline-img">
+                    e a sua <br> Comunidade.
+                </h1>
+                <p class="subtitle">
+                    Descubra eventos, retiros e pastorais. <br>
+                    <em>Verificado, atualizado e pronto</em> para a sua jornada de fé.
+                </p>
             </div>
 
-            <div id="area-cadastro" style="display: none;">
-                <div class="form-header">
-                    <h1>Criar Conta</h1>
-                    <p>Cadastre-se para participar da comunidade</p>
+            <div class="form-wrapper">
+                
+                <div id="area-login">
+                    <form id="loginForm" class="clean-form" onsubmit="handleLogin(event)">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="email">E-mail</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" id="email" placeholder="nome@exemplo.com" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="password">Senha</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="password" placeholder="Sua senha secreta" required>
+                                    <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <span class="custom-checkbox"></span>
+                                <span class="label-text">Lembrar-me</span>
+                            </label>
+                            <a href="#" class="forgot-password" onclick="handleForgotPassword()">Esqueci minha senha</a>
+                        </div>
+                        
+                        <div id="messageBox" class="message-box"></div>
+                        
+                        <div class="action-row">
+                            <button type="submit" class="btn-submit">
+                                Entrar <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <button type="button" class="btn-secondary" onclick="alternarTelas(true)">
+                                Criar conta
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <form id="registerForm" onsubmit="handleRegister(event)">
-                    <div class="input-group">
-                        <label for="reg-nome">Nome Completo</label>
-                        <div class="input-wrapper">
-                            <i class="fa-regular fa-user input-icon"></i>
-                            <input type="text" id="reg-nome" placeholder="Seu nome" required>
+
+                <div id="area-cadastro" style="display: none;">
+                    <form id="registerForm" class="clean-form" onsubmit="handleRegister(event)">
+                        <div class="input-row split-row">
+                            <div class="input-group">
+                                <label for="reg-nome">Nome</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-user input-icon"></i>
+                                    <input type="text" id="reg-nome" placeholder="Seu nome" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="reg-telefone">Telefone</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-phone input-icon"></i>
+                                    <input type="text" id="reg-telefone" placeholder="(11) 99999-9999" oninput="maskPhone(event)" maxlength="15">
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="reg-email">E-mail</label>
-                        <div class="input-wrapper">
-                            <i class="fa-regular fa-envelope input-icon"></i>
-                            <input type="email" id="reg-email" placeholder="seu@email.com" required>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="reg-email">E-mail</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" id="reg-email" placeholder="seu@email.com" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="reg-senha">Senha</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-lock input-icon"></i>
-                            <input type="password" id="reg-senha" placeholder="Mínimo 6 caracteres" required>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="reg-senha">Senha</label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="reg-senha" placeholder="Mínimo 6 caracteres" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="reg-telefone">Telefone</label>
-                        <div class="input-wrapper">
-                            <i class="fa-solid fa-phone input-icon"></i>
-                            <input type="text" id="reg-telefone" placeholder="(91) 99999-9999">
+                        
+                        <div class="action-row">
+                            <button type="submit" class="btn-submit">
+                                Cadastrar <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <button type="button" class="btn-secondary" onclick="alternarTelas(false)">
+                                Já tenho conta
+                            </button>
                         </div>
-                    </div>
-                    <button type="submit" class="btn-submit">
-                        <span>Cadastrar</span>
-                        <i class="fa-solid fa-user-plus"></i>
-                    </button>
-                </form>
-                <div class="form-footer">
-                    <p>Já tem uma conta? <a href="#" onclick="alternarTelas(false)">Fazer Login</a></p>
+                    </form>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+
+        <section class="right-panel">
+            <div class="hero-image-card">
+                <div class="slide slide-1"></div>
+                <div class="slide slide-2"></div>
+                <div class="slide slide-3"></div>
+                
+                <div class="hero-overlay">
+                    <p class="hero-text">
+                        Apoiamos famílias, jovens e fiéis a encontrarem clareza e propósito. Faça da nossa paróquia a sua segunda casa.
+                    </p>
+                    <div class="slider-dots">
+                        <span class="dot d1"></span>
+                        <span class="dot d2"></span>
+                        <span class="dot d3"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <script src="script.js"></script>
+    
+    <script>
+        function maskPhone(e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        }
+    </script>
 </body>
 </html>
