@@ -48,7 +48,6 @@
     .fade-in { animation: fadeSlideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
     .progress-animated { transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
     
-    /* Scrollbar minimalista */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(12, 59, 94, 0.2); border-radius: 10px; }
@@ -63,7 +62,6 @@
     .animate-marquee { display: flex; animation: marquee 25s linear infinite; }
     .animate-marquee:hover { animation-play-state: paused; }
 
-    /* --- SIDEBAR E MENUS (Inspirado no ZOSS) --- */
     .layout-sidebar {
       width: 280px;
       background-color: var(--brand-blue);
@@ -76,7 +74,6 @@
       z-index: 20;
     }
 
-    /* Comportamento dos Itens do Menu Controlados 100% via CSS (resolve o bug do hover branco) */
     .nav-item {
       position: relative;
       transition: all 0.3s ease;
@@ -112,7 +109,6 @@
     }
     .nav-item.active .nav-icon { color: var(--brand-blue); }
 
-    /* --- COMPONENTES GERAIS --- */
     .layout-header {
       background-color: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -134,10 +130,9 @@
     @media (min-width: 640px) { .layout-grid-metricas { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1280px) { .layout-grid-metricas { grid-template-columns: repeat(4, 1fr); } }
 
-    /* Cards de Métricas Azul Profundo com Destaque */
     .layout-card-metrica {
       background: linear-gradient(135deg, var(--brand-blue) 0%, #072a44 100%);
-      border: 1px solid rgba(245, 166, 35, 0.15); /* Borda ouro sutil */
+      border: 1px solid rgba(245, 166, 35, 0.15);
       border-radius: 24px;
       padding: 26px;
       display: flex;
@@ -635,7 +630,7 @@
               <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Agenda Oficial</h3>
             </div>
             <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
+              <table class="w-full table tabela">
                 <thead class="border-b border-gray-100">
                   <tr>
                     <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Título</th>
@@ -774,6 +769,47 @@
         </div>
       </section>
 
+      <section id="sec-ministerios" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start">
+            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
+              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="music" class="w-5 h-5"></i></div>
+              Novo Ministério
+            </h3>
+            <form id="form-ministerio" class="space-y-4">
+              <div>
+                <label class="layout-label">Nome do Ministério *</label>
+                <input name="nome" required placeholder="Ex: Ministério de Música" class="layout-input" />
+              </div>
+              <div>
+                <label class="layout-label">Descrição</label>
+                <textarea name="descricao" placeholder="Finalidade do ministério..." class="layout-input h-24 resize-none"></textarea>
+              </div>
+              <div class="pt-2">
+                <button type="submit" class="layout-btn-enviar">Salvar Ministério</button>
+              </div>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
+            <div class="px-8 py-6 border-b border-gray-100 bg-white">
+              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Ministérios Existentes</h3>
+            </div>
+            <div class="overflow-x-auto p-4">
+              <table class="w-full tabela">
+                <thead class="border-b border-gray-100">
+                  <tr>
+                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Nome</th>
+                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Descrição</th>
+                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="ministerios-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="sec-inscricoes" class="hidden fade-in">
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
           <div id="container-form-inscricao" class="layout-formulario self-start">
@@ -862,6 +898,47 @@
                 <tbody id="voluntarios-tbody"></tbody>
               </table>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-comentarios" class="hidden fade-in">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start">
+            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
+              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="message-square" class="w-5 h-5"></i></div>
+              Enviar Testemunho
+            </h3>
+            <form id="form-comentario" class="space-y-4">
+              <div>
+                <label class="layout-label">Selecione o Evento *</label>
+                <select id="select-comentario-evento" name="evento" required class="layout-input bg-white cursor-pointer"></select>
+              </div>
+              <div>
+                <label class="layout-label">Avaliação da Experiência *</label>
+                <input type="hidden" id="input-comentario-avaliacao" name="avaliacao" value="5" required />
+                <div id="star-rating-container" class="flex items-center gap-1.5 mt-1 text-slate-300">
+                  <button type="button" data-star="1" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="2" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="3" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="4" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                  <button type="button" data-star="5" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
+                </div>
+              </div>
+              <div>
+                <label class="layout-label">Sua Mensagem / Nota Pastoral *</label>
+                <textarea name="mensagem" required placeholder="Escreva aqui seu testemunho..." class="layout-input h-24 resize-none"></textarea>
+              </div>
+              <div class="pt-2">
+                <button type="submit" class="layout-btn-enviar">Publicar Mensagem</button>
+              </div>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
+            <div class="px-8 py-6 border-b border-gray-100 bg-white">
+              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Mural de Feedbacks</h3>
+            </div>
+            <div id="comentarios-mural-container" class="p-6 space-y-4 max-h-[550px] overflow-y-auto"></div>
           </div>
         </div>
       </section>
@@ -1009,7 +1086,6 @@
 </script>
 
 <script>
-  // Inicializador de ícones Lucide
   lucide.createIcons();
 </script>
 </body>
