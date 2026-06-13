@@ -1,176 +1,107 @@
 const express = require("express");
+const router = express.Router();
+const Usuario = require("../models/Usuario");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const roteador = express.Router();
+router.post("/", async (req, res) => {
+  try {
+    const { nome, email, senha, confirmaSenha, telefone, cpf, dataNascimento, genero, endereco } = req.body;
 
-const Modelo = require("../models/Usuario");
-const controleGenerico = require("../controllers/crudController");
-const autenticar = require("../middlewares/autenticacao");
-const autorizar = require("../middlewares/autorizacao");
+    if (!nome || !email || !senha) {
+      return res.status(400).json({ erro: "Campos obrigatórios não preenchidos" });
+    }
 
-roteador.post("/login", async (req, res) => {
+    const usuarioExistente = await Usuario.findOne({ email });
+    if (usuarioExistente) {
+      return res.status(400).json({ erro: "Este e-mail já está cadastrado" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const senhaCriptografada = await bcrypt.hash(senha, salt);
+
+    const novoUsuario = new Usuario({
+      nome,
+      email,
+      senha: senhaCriptografada,
+      telefone,
+      cpf,
+      dataNascimento,
+      genero,
+      endereco,
+      tipo: "membro",
+      origem: "publico"
+    });
+
+    await novoUsuario.save();
+    return res.status(201).json(novoUsuario);
+  } catch (error) {
+    return res.status(500).json({ erro: "Erro interno do servidor" });
+  }
+});
+
+router.post("/login", async (req, res) => {
   try {
     const { email, senha } = req.body;
 
-    if (!email || !senha) {
-      return res.status(400).json({
-        erro: "E-mail e senha são obrigatórios"
-      });
-    }
-
-    const usuario = await Modelo.findOne({
-      email: email.toLowerCase().trim()
-    }).select("+senha");
-
+    const usuario = await Usuario.findOne({ email });
     if (!usuario) {
-      return res.status(401).json({
-        erro: "E-mail ou senha inválidos"
-      });
+      return res.status(400).json({ erro: "E-mail ou senha inválidos" });
     }
 
-    const senhaCorreta = await usuario.compararSenha(senha);
+    let senhaValida = false;
+    if (usuario.senha.startsWith("$2a$") || usuario.senha.startsWith("$2b$")) {
+      senhaValida = await bcrypt.compare(senha, usuario.senha);
+    } else {
+      senhaValida = (senha === usuario.senha);
+    }
 
-    if (!senhaCorreta) {
-      return res.status(401).json({
-        erro: "E-mail ou senha inválidos"
-      });
+    if (!senhaValida) {
+      return res.status(400).json({ erro: "E-mail ou senha inválidos" });
     }
 
     const token = jwt.sign(
-      {
-        id: usuario._id,
-        tipo: usuario.tipo
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN || "8h"
-      }
+      { id: usuario._id, tipo: usuario.tipo },
+      process.env.JWT_SECRET || "suachavesecretasupersegura123",
+      { expiresIn: "1d" }
     );
 
-    const usuarioResposta = usuario.toObject();
-    delete usuarioResposta.senha;
-
-    return res.status(200).json({
-      usuario: usuarioResposta,
-      token
-    });
-  } catch (erro) {
-    return res.status(500).json({
-      erro: erro.message
-    });
+    return res.status(200).json({ token, usuario });
+  } catch (error) {
+    return res.status(500).json({ erro: "Erro interno do servidor" });
   }
 });
 
-roteador.post("/", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
-    const dados = { ...req.body };
+    const { nome, telefone, cpf, dataNascimento, genero, avatar } = req.body;
 
-    if (dados.funcao) {
-      dados.tipo = dados.funcao;
-      delete dados.funcao;
+    const usuario = await Usuario.findById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ erro: "Usuário não encontrado" });
     }
 
-    if (!dados.senha) {
-      dados.senha = "123456";
-    }
+    if (nome) usuario.nome = nome;
+    if (telefone) usuario.telefone = telefone;
+    if (cpf) usuario.cpf = cpf;
+    if (dataNascimento) usuario.dataNascimento = dataNascimento;
+    if (genero) usuario.genero = genero;
+    if (avatar) usuario.avatar = avatar;
 
-    if (dados.origem === "publico") {
-      dados.tipo = "membro";
-    }
-
-    delete dados.origem;
-
-    const novoUsuario = await Modelo.create(dados);
-
-    const usuarioResposta = novoUsuario.toObject();
-    delete usuarioResposta.senha;
-
-    return res.status(201).json(usuarioResposta);
-  } catch (erro) {
-    if (erro.code === 11000) {
-      return res.status(409).json({
-        erro: "E-mail já cadastrado"
-      });
-    }
-
-    return res.status(400).json({
-      erro: erro.message
-    });
+    await usuario.save();
+    return res.status(200).json(usuario);
+  } catch (error) {
+    return res.status(500).json({ erro: "Erro interno do servidor" });
   }
 });
 
-roteador.get(
-  "/",
-  autenticar,
-  autorizar("admin","pastor"),
-  controleGenerico.obterTodos(Modelo)
-);
-
-roteador.get(
-  "/:id",
-  autenticar,
-  autorizar("admin"),
-  controleGenerico.obterPorId(Modelo)
-);
-
-roteador.put(
-  "/:id",
-  autenticar,
-  autorizar("admin"),
-  async (req, res) => {
-    try {
-      const usuario = await Modelo.findById(req.params.id).select("+senha");
-
-      if (!usuario) {
-        return res.status(404).json({
-          erro: "Usuário não encontrado"
-        });
-      }
-
-      const camposPermitidos = [
-        "nome",
-        "email",
-        "senha",
-        "tipo",
-        "telefone",
-        "ministerio"
-      ];
-
-      camposPermitidos.forEach((campo) => {
-        if (req.body[campo] !== undefined) {
-          usuario[campo] = req.body[campo];
-        }
-      });
-
-      if (req.body.funcao !== undefined) {
-        usuario.tipo = req.body.funcao;
-      }
-
-      await usuario.save();
-
-      const usuarioResposta = usuario.toObject();
-      delete usuarioResposta.senha;
-
-      return res.status(200).json(usuarioResposta);
-    } catch (erro) {
-      if (erro.code === 11000) {
-        return res.status(409).json({
-          erro: "E-mail já cadastrado"
-        });
-      }
-
-      return res.status(400).json({
-        erro: erro.message
-      });
-    }
+router.get("/", async (req, res) => {
+  try {
+    const usuarios = await Usuario.find().select("-senha");
+    return res.status(200).json(usuarios);
+  } catch (error) {
+    return res.status(500).json({ erro: "Erro ao buscar usuários" });
   }
-);
+});
 
-roteador.delete(
-  "/:id",
-  autenticar,
-  autorizar("admin","pastor"),
-  controleGenerico.remover(Modelo)
-);
-
-module.exports = roteador;
+module.exports = router;

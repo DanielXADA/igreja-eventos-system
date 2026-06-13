@@ -4,13 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Igreja Nova Vida — Sistema de Gestão</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  
   <script>
     tailwind.config = {
       theme: {
@@ -20,7 +18,7 @@
               blue: '#0c3b5e',
               light: '#165b8f',
               gold: '#f5a623',
-              soft: '#f9fafb'
+              soft: '#f8fafc'
             }
           },
           fontFamily: {
@@ -31,1062 +29,619 @@
       },
     };
   </script>
-  
   <style>
     :root {
       --brand-blue: #0c3b5e;
       --brand-light: #165b8f;
       --brand-gold: #f5a623;
     }
-
-    body { font-family: 'Nunito', sans-serif; background-color: #f9fafb; }
-    
+    body { font-family: 'Nunito', sans-serif; background-color: #f8fafc; color: #1e293b; }
     @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(15px); }
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .fade-in { animation: fadeSlideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) both; }
-    .progress-animated { transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
-    
+    .fade-in { animation: fadeSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(12, 59, 94, 0.2); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(12, 59, 94, 0.4); }
-    
+    ::-webkit-scrollbar-thumb { background: rgba(12, 59, 94, 0.15); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(12, 59, 94, 0.3); }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-clamp: 2; }
-
     @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
     }
-    .animate-marquee { display: flex; animation: marquee 25s linear infinite; }
+    .animate-marquee { display: flex; animation: marquee 30s linear infinite; }
     .animate-marquee:hover { animation-play-state: paused; }
-
     .layout-sidebar {
       width: 280px;
-      background-color: var(--brand-blue);
+      background: linear-gradient(180deg, #0c3b5e 0%, #061f32 100%);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       overflow-y: auto;
-      transition: all 0.3s ease;
-      box-shadow: 4px 0 25px rgba(0, 0, 0, 0.08);
+      transition: width 0.3s ease;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
       z-index: 20;
     }
-
     .nav-item {
       position: relative;
-      transition: all 0.3s ease;
-      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.2s ease;
+      color: rgba(255, 255, 255, 0.65);
+      border-left: 4px solid transparent;
     }
     .nav-item .nav-icon {
-      color: rgba(255, 255, 255, 0.5);
-      transition: all 0.3s ease;
+      color: rgba(255, 255, 255, 0.4);
+      transition: all 0.2s ease;
     }
     .nav-item:hover:not(.active) {
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.04);
       color: #ffffff;
     }
     .nav-item:hover:not(.active) .nav-icon {
-      color: #ffffff;
+      color: rgba(255, 255, 255, 0.9);
     }
     .nav-item.active { 
-      background-color: #f9fafb; 
-      color: var(--brand-blue); 
+      background-color: rgba(255, 255, 255, 0.08); 
+      color: #ffffff; 
       font-weight: 700; 
-      border-radius: 20px 0 0 20px;
+      border-left-color: var(--brand-gold);
     }
-    .nav-item.active::before {
-      content: '';
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 45%;
-      width: 4px;
-      background-color: var(--brand-gold);
-      border-radius: 4px;
-    }
-    .nav-item.active .nav-icon { color: var(--brand-blue); }
-
+    .nav-item.active .nav-icon { color: var(--brand-gold); }
     .layout-header {
-      background-color: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(12, 59, 94, 0.06);
-      padding: 18px 36px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #edf2f7;
+      padding: 16px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
       z-index: 10;
     }
-
     .layout-grid-metricas {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
-      gap: 24px;
-      margin-bottom: 30px;
+      gap: 20px;
+      margin-bottom: 24px;
     }
     @media (min-width: 640px) { .layout-grid-metricas { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1280px) { .layout-grid-metricas { grid-template-columns: repeat(4, 1fr); } }
-
     .layout-card-metrica {
-      background: linear-gradient(135deg, var(--brand-blue) 0%, #072a44 100%);
+      background: linear-gradient(135deg, #0c3b5e 0%, #061f32 100%);
       border: 1px solid rgba(245, 166, 35, 0.15);
-      border-radius: 24px;
-      padding: 26px;
+      border-radius: 16px;
+      padding: 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 10px 30px rgba(12, 59, 94, 0.15);
-      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 4px 12px rgba(12, 59, 94, 0.08);
+      transition: all 0.25s ease;
     }
     .layout-card-metrica:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 35px rgba(12, 59, 94, 0.25);
-      border-color: rgba(245, 166, 35, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(12, 59, 94, 0.15);
+      border-color: var(--brand-gold);
     }
-
     .layout-formulario, .layout-card-mural {
       background-color: #ffffff;
-      border: 1px solid rgba(12, 59, 94, 0.05);
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 0 12px 40px rgba(12, 59, 94, 0.03);
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
     }
-
     .layout-input {
       width: 100%;
-      padding: 14px 18px;
-      font-size: 15px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 14px;
-      background-color: #f9fafb;
-      color: #111827;
-      transition: all 0.3s ease;
+      padding: 12px 16px;
+      font-size: 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      background-color: #ffffff;
+      color: #0f172a;
+      outline: none;
+      transition: all 0.2s ease;
     }
     .layout-input:focus {
-      outline: none;
-      border-color: var(--brand-light);
-      background-color: #ffffff;
-      box-shadow: 0 0 0 4px rgba(12, 59, 94, 0.08);
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 4px rgba(12, 59, 94, 0.1);
     }
-
     .layout-label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      color: var(--brand-blue);
+      color: #475569;
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       letter-spacing: 0.5px;
     }
-
     .layout-btn-enviar {
       width: 100%;
       background-color: var(--brand-blue);
       color: #ffffff;
       font-weight: 700;
-      font-size: 15px;
-      padding: 16px;
+      font-size: 14px;
+      padding: 14px;
       border: none;
-      border-radius: 50px;
-      transition: all 0.3s ease;
+      border-radius: 12px;
+      transition: all 0.2s ease;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .layout-btn-enviar:hover {
-      background-color: var(--brand-gold);
-      color: var(--brand-blue);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(245, 166, 35, 0.25);
+      background-color: #061f32;
+      transform: translateY(-1px);
     }
-
-    .tabela th { background-color: #f9fafb; color: var(--brand-blue); font-weight: 700; border-bottom: 2px solid #e5e7eb; }
-    .tabela td { border-bottom: 1px solid #f3f4f6; }
+    .tabela th { background-color: #f8fafc; color: #475569; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; padding: 14px 16px; }
+    .tabela td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; color: #334155; font-size: 13px; }
   </style>
 </head>
 <body class="antialiased">
-<div class="flex h-screen overflow-hidden bg-brand-soft">
+<div class="flex h-screen overflow-hidden">
   
   <aside id="sidebar-container" class="layout-sidebar">
-    <div class="px-8 py-8 flex items-center gap-4">
-      <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+    <div class="px-6 py-6 flex items-center gap-3 border-b border-white/5">
+      <div class="w-9 h-9 bg-white rounded-lg flex items-center justify-center shadow-sm flex-shrink-0">
         <i data-lucide="church" class="w-5 h-5 text-brand-blue"></i>
       </div>
-      <div>
-        <h1 class="font-display font-bold text-white text-lg tracking-wide leading-tight">Paróquia Santa Maria</h1>
-        <p class="text-[10px] text-brand-gold mt-0.5 uppercase tracking-widest font-semibold">Gestão Eclesiástica</p>
+      <div class="min-w-0">
+        <h1 class="font-display font-bold text-white text-base tracking-wide truncate">Santa Maria</h1>
+        <p class="text-[9px] text-brand-gold uppercase tracking-widest font-bold">Gestão Eclesiástica</p>
       </div>
     </div>
     
-    <nav class="flex-1 pl-4 pr-0 pt-2 pb-4 space-y-1">
-      <p class="px-4 mb-4 text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Principal</p>
-      
-      <button data-section="dashboard" class="nav-item active w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="layout-dashboard" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Dashboard
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <p class="px-3 mb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">Principal</p>
+      <button data-section="dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="layout-dashboard" class="nav-icon w-4 h-4 flex-shrink-0"></i>Dashboard
+      </button>
+      <button data-section="perfil" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="user-check" class="nav-icon w-4 h-4 flex-shrink-0"></i>Meu Perfil / Simulador
       </button>
       
-      <button data-section="perfil" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="user-check" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Meu Perfil / Simulador
+      <p class="px-3 pt-4 mb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">Cadastros</p>
+      <button data-section="usuarios" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="users" class="nav-icon w-4 h-4 flex-shrink-0"></i>Usuários / Membros
+      </button>
+      <button data-section="eventos" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="calendar" class="nav-icon w-4 h-4 flex-shrink-0"></i>Eventos
+      </button>
+      <button data-section="categorias" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="tag" class="nav-icon w-4 h-4 flex-shrink-0"></i>Categorias
+      </button>
+      <button data-section="locais" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="map-pin" class="nav-icon w-4 h-4 flex-shrink-0"></i>Locais
+      </button>
+      <button data-section="ministerios" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="music" class="nav-icon w-4 h-4 flex-shrink-0"></i>Ministérios
       </button>
       
-      <p class="px-4 pt-6 mb-4 text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Cadastros</p>
-      
-      <button data-section="usuarios" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="users" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Usuários / Membros
+      <p class="px-3 pt-4 mb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">Operações</p>
+      <button data-section="inscricoes" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="clipboard-list" class="nav-icon w-4 h-4 flex-shrink-0"></i>Inscrições & Check-in
+      </button>
+      <button data-section="voluntarios" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="heart" class="nav-icon w-4 h-4 flex-shrink-0"></i>Escala Voluntários
+      </button>
+      <button data-section="comentarios" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="message-square" class="nav-icon w-4 h-4 flex-shrink-0"></i>Comentários
       </button>
       
-      <button data-section="eventos" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="calendar-days" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Eventos
+      <p class="px-3 pt-4 mb-2 text-[10px] font-bold text-white/30 uppercase tracking-widest">Financeiro</p>
+      <button data-section="doacoes" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="banknote" class="nav-icon w-4 h-4 flex-shrink-0"></i>Doações
       </button>
-      
-      <button data-section="categorias" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="tag" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Categorias
+      <button data-section="notificacoes" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="bell" class="nav-icon w-4 h-4 flex-shrink-0"></i>Notificações
       </button>
-      
-      <button data-section="locais" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="map-pin" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Locais
-      </button>
-      
-      <button data-section="ministerios" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="music" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Ministérios
-      </button>
-      
-      <p class="px-4 pt-6 mb-4 text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Operações</p>
-      
-      <button data-section="inscricoes" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="clipboard-list" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Inscrições & Check-in
-      </button>
-      
-      <button data-section="voluntarios" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="heart" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Escala Voluntários
-      </button>
-      
-      <button data-section="comentarios" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="message-square" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Comentários
-      </button>
-      
-      <p class="px-4 pt-6 mb-4 text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Financeiro & Avisos</p>
-      
-      <button data-section="doacoes" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="banknote" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Doações
-      </button>
-      
-      <button data-section="notificacoes" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="bell" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Notificações
-      </button>
-      
-      <button data-section="relatorios" class="nav-item w-full flex items-center gap-3 px-6 py-3.5 text-sm font-medium">
-        <i data-lucide="bar-chart-2" class="nav-icon w-5 h-5 flex-shrink-0"></i>
-        Relatórios
+      <button data-section="relatorios" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-left">
+        <i data-lucide="bar-chart-2" class="nav-icon w-4 h-4 flex-shrink-0"></i>Relatórios
       </button>
     </nav>
     
-    <div class="px-6 py-6 border-t border-white/10 flex flex-col gap-4 bg-brand-blue">
+    <div class="p-4 border-t border-white/5 bg-[#061f32]/60 space-y-3">
       <div class="flex items-center gap-3">
-        <img id="sidebar-user-avatar" src="" class="w-10 h-10 rounded-full object-cover border-2 border-brand-gold shadow-sm flex-shrink-0" />
-        <div class="flex-1 min-w-0">
-          <p id="sidebar-user-name" class="text-sm font-bold text-white truncate">Carregando...</p>
-          <p id="sidebar-user-email" class="text-[10px] text-white/60 truncate">...</p>
-          <div class="mt-1">
-            <span id="sidebar-user-rank" class="inline-block text-[9px] font-bold text-brand-blue bg-brand-gold px-2 py-0.5 rounded-full uppercase tracking-widest">...</span>
-          </div>
+        <img id="sidebar-user-avatar" src="" class="w-9 h-9 rounded-full object-cover border-2 border-brand-gold flex-shrink-0" />
+        <div class="min-w-0 flex-1">
+          <p id="sidebar-user-name" class="text-xs font-bold text-white truncate">Carregando...</p>
+          <p id="sidebar-user-email" class="text-[10px] text-white/50 truncate">...</p>
         </div>
       </div>
-      <button id="btn-sair-sistema" class="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 hover:bg-red-500/20 hover:text-red-300 text-white/80 rounded-xl transition-all text-xs font-bold border border-white/10">
-        <i data-lucide="log-out" class="w-4 h-4"></i>
-        Sair da Conta
-      </button>
+      <div class="flex justify-between items-center gap-2 pt-1">
+        <span id="sidebar-user-rank" class="text-[9px] font-bold text-[#0c3b5e] bg-brand-gold px-2 py-0.5 rounded-full uppercase tracking-wider">...</span>
+        <button id="btn-sair-sistema" class="text-white/50 hover:text-red-400 p-1 rounded-lg transition-colors"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+      </div>
     </div>
   </aside>
 
   <div class="flex-1 flex flex-col overflow-hidden">
-    
-    <header class="layout-header">
-      <div class="flex items-center gap-5">
-        <button id="btn-toggle-sidebar" class="text-brand-blue hover:bg-gray-100 p-2 rounded-xl transition-colors border border-transparent hover:border-gray-200">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
+    <header class="layout-header shadow-sm">
+      <div class="flex items-center gap-4">
+        <button id="btn-toggle-sidebar" class="text-slate-600 hover:bg-slate-50 p-2 rounded-lg border border-slate-200 transition-colors"><i data-lucide="menu" class="w-4 h-4"></i></button>
         <div>
-          <h2 id="page-title" class="font-display font-bold text-brand-blue text-2xl leading-tight tracking-tight">Visão Geral</h2>
-          <p id="page-subtitle" class="text-xs font-semibold text-slate-400 mt-0.5 uppercase tracking-wider">Acompanhamento Eclesiástico</p>
+          <h2 id="page-title" class="font-display font-bold text-brand-blue text-xl tracking-tight">Visão Geral</h2>
+          <p id="page-subtitle" class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Acompanhamento Eclesiástico</p>
         </div>
       </div>
-      <div class="relative">
-        <button id="btn-sino-notificacao" onclick="irParaSecaoRapido('notificacoes')" class="relative text-brand-blue hover:bg-brand-soft p-2.5 rounded-xl transition-colors flex items-center justify-center border border-gray-100 shadow-sm">
-          <i data-lucide="bell" class="w-5 h-5"></i>
-          <span id="badge-notificacao-contador" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white font-bold text-[9px] rounded-full flex items-center justify-center hidden shadow-sm border border-white">0</span>
-        </button>
-      </div>
+      <button id="btn-sino-notificacao" class="relative text-slate-600 hover:bg-slate-50 p-2 rounded-lg border border-slate-200 transition-colors"><i data-lucide="bell" class="w-4 h-4"></i><span id="badge-notificacao-contador" class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white font-bold text-[9px] rounded-full flex items-center justify-center hidden border border-white">0</span></button>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-8">
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
       
-      <section id="sec-dashboard" class="fade-in">
+      <section id="sec-dashboard" class="fade-in space-y-6">
         <div class="layout-grid-metricas">
-          
           <div class="layout-card-metrica">
-            <div class="space-y-1.5">
-              <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest">Eventos Ativos</p>
-              <p id="stat-eventos" class="text-4xl font-bold text-white font-display">—</p>
+            <div>
+              <p class="text-[10px] font-bold text-white/60 uppercase tracking-wider">Eventos Ativos</p>
+              <p id="stat-eventos" class="text-2xl font-bold text-white font-display mt-0.5">—</p>
             </div>
-            <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center shadow-inner border border-white/5">
-              <i data-lucide="calendar-check" class="w-6 h-6 text-white"></i>
-            </div>
+            <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 text-brand-gold"><i data-lucide="calendar"></i></div>
           </div>
-
           <div class="layout-card-metrica">
-            <div class="space-y-1.5">
-              <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest">Comunidade</p>
-              <p id="stat-membros" class="text-4xl font-bold text-white font-display">—</p>
+            <div>
+              <p class="text-[10px] font-bold text-white/60 uppercase tracking-wider">Comunidade</p>
+              <p id="stat-membros" class="text-2xl font-bold text-white font-display mt-0.5">—</p>
             </div>
-            <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center shadow-inner border border-white/5">
-              <i data-lucide="users" class="w-6 h-6 text-white"></i>
-            </div>
+            <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 text-brand-gold"><i data-lucide="users"></i></div>
           </div>
-
           <div class="layout-card-metrica">
-            <div class="space-y-1.5">
-              <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest">Servos / Escala</p>
-              <p id="stat-voluntarios" class="text-4xl font-bold text-white font-display">—</p>
+            <div>
+              <p class="text-[10px] font-bold text-white/60 uppercase tracking-wider">Servos / Escala</p>
+              <p id="stat-voluntarios" class="text-2xl font-bold text-white font-display mt-0.5">—</p>
             </div>
-            <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center shadow-inner border border-white/5">
-              <i data-lucide="heart-handshake" class="w-6 h-6 text-white"></i>
-            </div>
+            <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 text-brand-gold"><i data-lucide="heart"></i></div>
           </div>
-
           <div class="layout-card-metrica">
-            <div class="space-y-1.5">
-              <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest">Inscrições</p>
-              <p id="stat-inscricoes" class="text-4xl font-bold text-white font-display">—</p>
+            <div>
+              <p class="text-[10px] font-bold text-white/60 uppercase tracking-wider">Inscrições</p>
+              <p id="stat-inscricoes" class="text-2xl font-bold text-white font-display mt-0.5">—</p>
             </div>
-            <div class="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center shadow-inner border border-white/5">
-              <i data-lucide="clipboard-check" class="w-6 h-6 text-white"></i>
-            </div>
+            <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/10 text-brand-gold"><i data-lucide="file-text"></i></div>
           </div>
-
         </div>
         
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Meta de Doações</h3>
-              <i data-lucide="coins" class="w-5 h-5 text-brand-gold"></i>
-            </div>
-            <div id="donation-progress-content">
-              <div class="animate-pulse space-y-4">
-                <div class="h-6 bg-gray-100 rounded-lg w-3/4"></div>
-                <div class="h-3 bg-gray-100 rounded w-1/2"></div>
-                <div class="h-4 bg-gray-100 rounded-full mt-6"></div>
-                <div class="h-3 bg-gray-100 rounded w-1/3"></div>
-              </div>
-            </div>
+          <div class="layout-card-mural">
+            <h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider mb-4">Meta de Doações</h3>
+            <div id="donation-progress-content"></div>
           </div>
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 xl:col-span-2">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Próximos Encontros</h3>
-            </div>
-            <div id="recent-events-list" class="space-y-3"></div>
+          <div class="layout-card-mural xl:col-span-2">
+            <h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider mb-4">Próximos Encontros</h3>
+            <div id="recent-events-list" class="space-y-2"></div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 mt-6">
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between mb-6">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center border border-gray-200">
-                  <i data-lucide="globe" class="w-4 h-4 text-brand-blue"></i>
-                </div>
-                <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Vatican News - Notícias da Igreja</h3>
-              </div>
-            </div>
-            <div id="news-feed-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
-          </div>
+        <div class="layout-card-mural">
+          <h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider mb-4">Vatican News - Notícias da Igreja</h3>
+          <div id="news-feed-list" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
         </div>
 
-        <div class="grid grid-cols-1 gap-6 mt-6">
-          <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 overflow-hidden">
-            <div class="flex items-center gap-3 mb-6">
-              <div class="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center border border-yellow-100">
-                <i data-lucide="message-circle" class="w-4 h-4 text-brand-gold"></i>
-              </div>
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Mural da Comunidade</h3>
-            </div>
-            <div class="relative w-full overflow-hidden h-20 bg-brand-soft rounded-2xl border border-gray-100 flex items-center">
-              <div id="dashboard-testimonies-marquee" class="flex gap-6 whitespace-nowrap animate-marquee px-4 py-2 text-sm text-slate-600 font-medium">
-                <span class="inline-block bg-white px-5 py-2.5 rounded-xl border border-gray-100 shadow-sm">Carregando abençoados testemunhos...</span>
-              </div>
-            </div>
+        <div class="layout-card-mural overflow-hidden">
+          <h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider mb-4">Mural da Comunidade</h3>
+          <div class="relative w-full h-14 bg-slate-50 rounded-xl border border-slate-100 flex items-center overflow-hidden">
+            <div id="dashboard-testimonies-marquee" class="flex gap-4 whitespace-nowrap animate-marquee"></div>
           </div>
         </div>
       </section>
 
-      <section id="sec-perfil" class="hidden fade-in">
+      <section id="sec-perfil" class="hidden fade-in space-y-6">
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario xl:col-span-2">
-            <div class="flex items-center gap-4 border-b border-gray-100 pb-5 mb-6">
-              <div class="w-12 h-12 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200">
-                <i data-lucide="user" class="w-6 h-6"></i>
-              </div>
-              <div>
-                <h3 class="font-display font-bold text-brand-blue text-xl">Meus Dados Cadastrais</h3>
-                <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wider">Atualize suas informações</p>
-              </div>
-            </div>
-            <form id="form-perfil-atualizar" class="space-y-5">
-              <div class="flex flex-col sm:flex-row items-center gap-5 bg-brand-soft p-5 rounded-2xl border border-gray-100 mb-2">
-                <img id="profile-avatar-preview" src="" class="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md flex-shrink-0" />
-                <div class="flex-1 w-full">
-                  <label class="layout-label">URL da Foto de Perfil</label>
-                  <input id="input-perfil-foto" placeholder="Cole o link de uma imagem da internet" class="layout-input" />
-                </div>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label class="layout-label">Nome Completo</label>
-                  <input id="input-perfil-nome" required class="layout-input" />
-                </div>
-                <div>
-                  <label class="layout-label">Telefone</label>
-                  <input id="input-perfil-telefone" placeholder="(91) 99999-9999" class="layout-input" oninput="maskPhone(event)" maxlength="15" />
-                </div>
-              </div>
-              <div class="border-t border-gray-100 pt-5 mt-4">
-                <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest mb-4">Redes Sociais Paroquiais</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label class="flex items-center gap-1.5 text-xs font-bold text-brand-blue mb-2 uppercase tracking-wide"><i data-lucide="instagram" class="w-4 h-4 text-[#E1306C]"></i> Instagram</label>
-                    <input id="input-perfil-instagram" placeholder="@usuario" class="layout-input" />
-                  </div>
-                  <div>
-                    <label class="flex items-center gap-1.5 text-xs font-bold text-brand-blue mb-2 uppercase tracking-wide"><i data-lucide="facebook" class="w-4 h-4 text-[#1877F2]"></i> Facebook</label>
-                    <input id="input-perfil-facebook" placeholder="fb.com/usuario" class="layout-input" />
-                  </div>
-                  <div>
-                    <label class="flex items-center gap-1.5 text-xs font-bold text-brand-blue mb-2 uppercase tracking-wide"><i data-lucide="youtube" class="w-4 h-4 text-[#FF0000]"></i> YouTube</label>
-                    <input id="input-perfil-youtube" placeholder="youtube.com/canal" class="layout-input" />
-                  </div>
-                </div>
-              </div>
-              <div class="pt-4">
-                <button type="submit" class="layout-btn-enviar">
-                  <i data-lucide="save" class="w-4 h-4"></i> Salvar Alterações
-                </button>
-              </div>
-            </form>
-          </div>
           
-          <div id="card-simulador" class="layout-formulario self-start hidden">
-            <div class="flex items-center gap-4 mb-6">
-              <div class="w-12 h-12 bg-yellow-50 rounded-full flex items-center justify-center text-brand-gold border border-yellow-100">
-                <i data-lucide="shield-alert" class="w-6 h-6"></i>
-              </div>
-              <div>
-                <h3 class="font-display font-bold text-brand-blue text-lg">Simulador</h3>
-                <p class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Testar Hierarquias</p>
-              </div>
-            </div>
-            <div class="space-y-5">
-              <div>
-                <label class="layout-label">Selecione o Perfil</label>
-                <select id="select-teste-rank" class="layout-input bg-white cursor-pointer">
-                  <option value="admin">👑 Administrador (Acesso Total)</option>
-                  <option value="pastor">⛪ Pastor (Acesso Total)</option>
-                  <option value="lider">👔 Líder de Ministério (Médio)</option>
-                  <option value="voluntario">🤝 Voluntário (Operacional)</option>
-                  <option value="membro">🐑 Membro Comunidade (Mínimo)</option>
-                </select>
-              </div>
-              <button onclick="aplicarSimulacaoRank()" class="layout-btn-enviar">
-                Analisar Visibilidade
+          <div id="profile-view-container" class="layout-formulario xl:col-span-2 space-y-6">
+            <div class="flex justify-between items-center">
+              <h3 class="font-display font-bold text-brand-blue text-xl">Meu Perfil Paroquial</h3>
+              <button onclick="toggleModoEdicaoPerfil(true)" class="text-xs font-bold text-white bg-brand-blue px-5 py-2.5 rounded-full hover:bg-brand-gold hover:text-brand-blue transition-all flex items-center gap-2 shadow-sm">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar Meus Dados
               </button>
             </div>
-          </div>
-        </div>
-      </section>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-6 bg-slate-50/50 p-6 rounded-3xl border border-slate-100">
+              <div class="relative w-24 h-24">
+                <img id="view-perfil-foto" src="" class="w-full h-full rounded-full object-cover border-4 border-white shadow-md" />
+              </div>
+              <div class="space-y-1 text-center sm:text-left">
+                <p id="view-perfil-nome" class="text-2xl font-bold text-slate-800 font-display">Carregando...</p>
+                <p id="view-perfil-rank" class="text-[10px] font-bold text-[#0c3b5e] bg-brand-gold px-2.5 py-1 rounded-full uppercase tracking-widest inline-block">Membro</p>
+              </div>
+            </div>
 
-      <section id="sec-usuarios" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="user-plus" class="w-5 h-5"></i></div>
-              Novo Membro
-            </h3>
-            <form id="form-usuario" class="space-y-4">
-              <div>
-                <label class="layout-label">Nome Completo *</label>
-                <input name="nome" required placeholder="Ex: Maria da Conceição" class="layout-input" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 pt-2">
+              <div class="space-y-1">
+                <label class="layout-label !text-slate-400">CPF Registrado</label>
+                <p id="view-perfil-cpf" class="text-sm font-bold text-slate-700 font-mono">—</p>
               </div>
-              <div>
-                <label class="layout-label">E-mail *</label>
-                <input name="email" type="email" required placeholder="email@exemplo.com" class="layout-input" />
+              <div class="space-y-1">
+                <label class="layout-label !text-slate-400">E-mail de Acesso</label>
+                <p id="view-perfil-email" class="text-sm font-bold text-slate-700">—</p>
               </div>
-              <div>
-                <label class="layout-label">Telefone</label>
-                <input name="telefone" placeholder="(91) 99999-9999" class="layout-input" oninput="maskPhone(event)" maxlength="15" />
+              <div class="space-y-1">
+                <label class="layout-label !text-slate-400">Telefone / WhatsApp</label>
+                <p id="view-perfil-telefone" class="text-sm font-bold text-slate-700">—</p>
               </div>
-              <div>
-                <label class="layout-label">Função / Cargo</label>
-                <select id="select-funcao-usuario" name="funcao" class="layout-input bg-white cursor-pointer">
-                  <option value="membro">🐑 Membro comum</option>
-                  <option value="lider">👔 Líder de Ministério</option>
-                  <option value="pastor">⛪ Pastor / Clero</option>
-                  <option id="option-funcao-admin" value="admin">👑 Administrador</option>
-                </select>
+              <div class="space-y-1">
+                <label class="layout-label !text-slate-400">Data de Nascimento</label>
+                <p id="view-perfil-nascimento" class="text-sm font-bold text-slate-700">—</p>
               </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Cadastrar Usuário</button>
+              <div class="space-y-1">
+                <label class="layout-label !text-slate-400">Gênero</label>
+                <p id="view-perfil-genero" class="text-sm font-bold text-slate-700">—</p>
               </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Comunidade Registrada</h3>
-              <span id="usuarios-count" class="text-xs text-brand-gold bg-yellow-50 border border-yellow-100 px-3 py-1.5 rounded-full font-bold tracking-wider">—</span>
             </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Membro</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">E-mail</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Telefone</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Função</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="usuarios-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section id="sec-eventos" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="calendar-plus" class="w-5 h-5"></i></div>
-              Novo Evento
-            </h3>
-            <form id="form-evento" class="space-y-4">
-              <div>
-                <label class="layout-label">Título do Evento *</label>
-                <input name="titulo" required placeholder="Ex: Retiro de Jovens 2025" class="layout-input" />
-              </div>
-              <div>
-                <label class="layout-label">Descrição</label>
-                <textarea name="descricao" placeholder="Detalhes do evento..." class="layout-input h-24 resize-none"></textarea>
-              </div>
-              <div>
-                <label class="layout-label">Categoria *</label>
-                <div class="flex gap-2">
-                  <select id="select-evento-categoria" name="categoria" required class="layout-input bg-white cursor-pointer"></select>
-                  <button type="button" id="btn-add-categoria-rapido" onclick="irParaSecaoRapido('categorias')" class="px-4 bg-brand-soft text-brand-blue hover:bg-gray-200 rounded-xl border border-gray-200 transition-colors flex items-center justify-center hidden">
-                    <i data-lucide="plus" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label class="layout-label">Local de Realização *</label>
-                <div class="flex gap-2">
-                  <select id="select-evento-local" name="local" required class="layout-input bg-white cursor-pointer"></select>
-                  <button type="button" id="btn-add-local-rapido" onclick="irParaSecaoRapido('locais')" class="px-4 bg-brand-soft text-brand-blue hover:bg-gray-200 rounded-xl border border-gray-200 transition-colors flex items-center justify-center hidden">
-                    <i data-lucide="plus" class="w-5 h-5"></i>
-                  </button>
-                </div>
-              </div>
-              <div>
-                <label class="layout-label">Data do Evento *</label>
-                <input type="datetime-local" name="data" required class="layout-input bg-white" />
-              </div>
-              <div>
-                <label class="layout-label">Capacidade Máxima *</label>
-                <input type="number" name="capacidade" required min="1" placeholder="Ex: 100" class="layout-input" />
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Cadastrar Evento</button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Agenda Oficial</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full table tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Título</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Data</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Capacidade</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="eventos-tbody"></tbody>
-              </table>
+            <div id="view-perfil-redes" class="flex gap-4 pt-4 border-t border-slate-100 hidden">
+              <a id="link-perfil-insta" href="#" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-pink-50 hover:text-pink-600 transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+              <a id="link-perfil-face" href="#" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition-colors"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+              <a id="link-perfil-yt" href="#" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section id="sec-categorias" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="tag" class="w-5 h-5"></i></div>
-              Nova Categoria
-            </h3>
-            <form id="form-categoria" class="space-y-4">
-              <div>
-                <label class="layout-label">Nome da Categoria *</label>
-                <input name="nome" required placeholder="Ex: Retiros" class="layout-input" />
-              </div>
-              <div>
-                <label class="layout-label">Descrição</label>
-                <textarea name="descricao" placeholder="Breve resumo..." class="layout-input h-24 resize-none"></textarea>
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Salvar Categoria</button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Categorias de Eventos</h3>
+          <div id="profile-edit-container" class="layout-formulario xl:col-span-2 space-y-6 hidden">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+              <h3 class="font-display font-bold text-brand-blue text-xl">Atualizar Meus Dados</h3>
+              <button onclick="toggleModoEdicaoPerfil(false)" class="text-xs font-bold text-slate-400 hover:text-red-500 transition-colors">Cancelar Alterações</button>
             </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Nome</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Descrição</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="categorias-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-locais" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
-              <span id="titulo-form-local">Novo Espaço</span>
-            </h3>
-            <form id="form-local" class="space-y-4">
-              <div>
-                <label class="layout-label">Nome do Local *</label>
-                <input name="nome" required placeholder="Ex: Auditório Paroquial" class="layout-input" />
-              </div>
-              <div>
-                <label class="layout-label">Capacidade Máxima *</label>
-                <input type="number" name="capacidade" required min="1" placeholder="Ex: 250" class="layout-input" />
-              </div>
-              <div class="border-t border-gray-100 pt-5 mt-4">
-                <p class="text-[11px] font-bold text-brand-gold uppercase tracking-widest mb-4">Endereço Automatizado</p>
-                <div class="mb-3">
-                  <label class="layout-label">CEP *</label>
-                  <input id="input-local-cep" name="cep" required placeholder="00000-000" class="layout-input tracking-widest font-mono" />
-                </div>
-                <div class="grid grid-cols-3 gap-3 mb-3">
-                  <div class="col-span-2">
-                    <label class="layout-label">Rua</label>
-                    <input name="rua" placeholder="Rua / Avenida" class="layout-input bg-gray-100" readonly />
-                  </div>
-                  <div>
-                    <div class="flex justify-between items-center mb-1">
-                      <label class="layout-label !mb-0">Número *</label>
-                      <label class="inline-flex items-center text-[10px] text-brand-blue gap-1 cursor-pointer select-none font-bold">
-                        <input type="checkbox" id="chk-local-sn" class="rounded border-gray-300 text-brand-blue focus:ring-brand-blue w-3 h-3" />
-                        S/N
-                      </label>
+            
+            <form id="form-perfil-atualizar" class="space-y-5">
+              <div class="bg-slate-50 p-5 rounded-3xl border border-slate-200 space-y-4">
+                <div class="flex items-center gap-5">
+                  <img id="profile-avatar-preview" src="" class="w-16 h-16 rounded-full object-cover border-2 border-brand-gold shadow-sm" />
+                  <div class="flex-1">
+                    <label class="layout-label">Alterar Foto de Perfil</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
+                      <input id="input-perfil-foto" placeholder="Link da imagem (https://...)" class="layout-input !py-2 !text-[11px]" />
+                      <input type="file" id="input-perfil-arquivo-upload" accept="image/*" class="w-full text-[10px] text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:bg-brand-blue file:text-white hover:file:bg-brand-gold hover:file:text-brand-blue cursor-pointer">
                     </div>
-                    <input id="input-local-numero" name="numero" required placeholder="Nº" class="layout-input" />
-                  </div>
-                </div>
-                <div class="grid grid-cols-3 gap-3">
-                  <div>
-                    <label class="layout-label">Bairro</label>
-                    <input name="bairro" placeholder="Bairro" class="layout-input bg-gray-100" readonly />
-                  </div>
-                  <div>
-                    <label class="layout-label">Cidade</label>
-                    <input name="cidade" placeholder="Cidade" class="layout-input bg-gray-100" readonly />
-                  </div>
-                  <div>
-                    <label class="layout-label">Estado</label>
-                    <input name="estado" placeholder="UF" class="layout-input bg-gray-100 text-center uppercase" readonly />
                   </div>
                 </div>
               </div>
-              <div class="flex gap-3 mt-5 pt-2">
-                <button type="submit" class="layout-btn-enviar flex-1">Salvar Local</button>
-                <button type="button" id="btn-cancelar-local" class="px-6 bg-white hover:bg-gray-50 text-slate-600 text-sm font-bold rounded-full border border-gray-200 shadow-sm transition-all hidden">
-                  Cancelar
-                </button>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label class="layout-label">Nome Completo</label><input id="input-perfil-nome" required class="layout-input" /></div>
+                <div><label class="layout-label">CPF</label><input id="input-perfil-cpf" class="layout-input font-mono" placeholder="000.000.000-00" oninput="maskCPFField(event)" maxlength="14" /></div>
               </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><label class="layout-label">Telefone / WhatsApp</label><input id="input-perfil-telefone" placeholder="(91) 90000-0000" class="layout-input" oninput="maskPhoneField(event)" maxlength="15" /></div>
+                <div><label class="layout-label">Data de Nascimento</label><input id="input-perfil-nascimento" placeholder="00/00/0000" class="layout-input" oninput="maskDateField(event)" maxlength="10" /></div>
+                <div><label class="layout-label">Gênero</label><select id="input-perfil-genero" class="layout-input bg-white"><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option><option value="Outro">Outro</option></select></div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-slate-100 pt-4">
+                <div><label class="layout-label">Instagram</label><input id="input-perfil-instagram" placeholder="@usuario" class="layout-input" /></div>
+                <div><label class="layout-label">Facebook</label><input id="input-perfil-facebook" placeholder="fb.com/usuario" class="layout-input" /></div>
+                <div><label class="layout-label">YouTube</label><input id="input-perfil-youtube" placeholder="youtube.com/canal" class="layout-input" /></div>
+              </div>
+
+              <button type="submit" class="layout-btn-enviar !mt-6 shadow-md shadow-brand-blue/10">Gravar Alterações Permanentes</button>
             </form>
           </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Espaços Cadastrados</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Nome</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Capacidade</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Cidade / UF</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="locais-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section id="sec-ministerios" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="music" class="w-5 h-5"></i></div>
-              Novo Ministério
-            </h3>
-            <form id="form-ministerio" class="space-y-4">
-              <div>
-                <label class="layout-label">Nome do Ministério *</label>
-                <input name="nome" required placeholder="Ex: Ministério de Música" class="layout-input" />
-              </div>
-              <div>
-                <label class="layout-label">Descrição</label>
-                <textarea name="descricao" placeholder="Finalidade do ministério..." class="layout-input h-24 resize-none"></textarea>
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Salvar Ministério</button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Ministérios Existentes</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Nome</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Descrição</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="ministerios-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-inscricoes" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div id="container-form-inscricao" class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center text-brand-gold border border-yellow-100"><i data-lucide="clipboard-check" class="w-4 h-4"></i></div>
-              Nova Inscrição
-            </h3>
-            <form id="form-inscricao" class="space-y-4">
-              <div>
-                <label class="layout-label">Selecione o Evento *</label>
-                <select id="select-inscricao-evento" name="evento" required class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div id="box-select-inscricao-usuario">
-                <label class="layout-label">Selecione o Membro *</label>
-                <select id="select-inscricao-usuario" name="usuario" class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">
-                  Confirmar Vaga
-                </button>
-              </div>
-            </form>
-          </div>
-          <div id="container-tbl-inscricao" class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Controle de Presença / Check-in</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Membro</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Evento</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider">Status</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Ações</th>
-                  </tr>
-                </thead>
-                <tbody id="inscricoes-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-voluntarios" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-yellow-50 rounded-full flex items-center justify-center text-brand-gold border border-yellow-100"><i data-lucide="heart-handshake" class="w-4 h-4"></i></div>
-              Escalar Servo
-            </h3>
-            <form id="form-voluntario" class="space-y-4">
-              <div>
-                <label class="layout-label">Selecione o Evento *</label>
-                <select id="select-voluntario-evento" name="evento" required class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div>
-                <label class="layout-label">Selecione o Voluntário *</label>
-                <select id="select-voluntario-usuario" name="usuario" required class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div>
-                <label class="layout-label">Função / Ministério *</label>
-                <input name="funcao" required placeholder="Ex: Equipe de Som, Acolhimento" class="layout-input" />
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">
-                  Confirmar na Escala
-                </button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Escala Operacional de Eventos</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Voluntário</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Evento</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Função</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Remover</th>
-                  </tr>
-                </thead>
-                <tbody id="voluntarios-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-comentarios" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="message-square" class="w-5 h-5"></i></div>
-              Enviar Testemunho
-            </h3>
-            <form id="form-comentario" class="space-y-4">
-              <div>
-                <label class="layout-label">Selecione o Evento *</label>
-                <select id="select-comentario-evento" name="evento" required class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div>
-                <label class="layout-label">Avaliação da Experiência *</label>
-                <input type="hidden" id="input-comentario-avaliacao" name="avaliacao" value="5" required />
-                <div id="star-rating-container" class="flex items-center gap-1.5 mt-1 text-slate-300">
-                  <button type="button" data-star="1" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
-                  <button type="button" data-star="2" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
-                  <button type="button" data-star="3" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
-                  <button type="button" data-star="4" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
-                  <button type="button" data-star="5" class="hover:scale-110 transition-transform"><i data-lucide="star" class="w-6 h-6 fill-amber-400 text-amber-400"></i></button>
-                </div>
-              </div>
-              <div>
-                <label class="layout-label">Sua Mensagem / Nota Pastoral *</label>
-                <textarea name="mensagem" required placeholder="Escreva aqui seu testemunho..." class="layout-input h-24 resize-none"></textarea>
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Publicar Mensagem</button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Mural de Feedbacks</h3>
-            </div>
-            <div id="comentarios-mural-container" class="p-6 space-y-4 max-h-[550px] overflow-y-auto"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-doacoes" class="hidden fade-in">
-        <div id="view-financeiro-admin" class="grid grid-cols-1 xl:grid-cols-3 gap-6 hidden">
-          <div class="layout-formulario self-start">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="coins" class="w-4 h-4"></i></div>
-              Registrar Entrada
-            </h3>
-            <form id="form-doacao" class="space-y-4">
-              <div>
-                <label class="layout-label">Evento Vinculado</label>
-                <select id="select-doacao-evento" name="evento" class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div>
-                <label class="layout-label">Tipo de Contribuição *</label>
-                <select name="tipo" required class="layout-input bg-white cursor-pointer">
-                  <option value="dinheiro">💵 Financeiro (Dízimo / Oferta)</option>
-                  <option value="alimento">🍞 Alimentos / Cesta Básica</option>
-                  <option value="ingresso">🎟️ Bilheteria / Ingressos</option>
-                </select>
-              </div>
-              <div>
-                <label class="layout-label">Valor / Quantidade *</label>
-                <input type="number" name="valor" step="0.01" required placeholder="0.00" class="layout-input" />
-              </div>
-              <div>
-                <label class="layout-label">Identificação / Obs.</label>
-                <input name="descricao" placeholder="Ex: Oferta anônima, Dízimo Geral" class="layout-input" />
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Lançar no Caixa</button>
-              </div>
-            </form>
-          </div>
-          <div class="layout-card-mural xl:col-span-2 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Histórico Financeiro</h3>
-            </div>
-            <div class="overflow-x-auto p-4">
-              <table class="w-full tabela">
-                <thead class="border-b border-gray-100">
-                  <tr>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider rounded-tl-xl">Origem / Destinação</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Categoria</th>
-                    <th class="px-5 py-4 text-left text-[11px] uppercase tracking-wider">Valor Líquido</th>
-                    <th class="px-5 py-4 text-center text-[11px] uppercase tracking-wider w-24 rounded-tr-xl">Estornar</th>
-                  </tr>
-                </thead>
-                <tbody id="doacoes-tbody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        
-        <div id="view-financeiro-membro" class="max-w-xl mx-auto bg-white rounded-3xl border border-gray-100 p-10 shadow-lg text-center space-y-8 hidden mt-10">
-          <div class="w-20 h-20 bg-yellow-50 rounded-full flex items-center justify-center mx-auto text-brand-gold border border-yellow-100 shadow-sm">
-            <i data-lucide="qr-code" class="w-10 h-10"></i>
-          </div>
-          <div>
-            <h3 class="font-display font-bold text-brand-blue text-3xl">Ofertas & Dízimos</h3>
-            <p class="text-sm text-slate-500 mt-2">Sua contribuição apoia as obras sociais da nossa paróquia.</p>
-          </div>
-          <div class="bg-brand-soft border border-gray-200 rounded-2xl p-5 font-mono text-base font-bold text-brand-blue select-all cursor-pointer shadow-inner">
-            pix@igrejanovavida.com.br
-          </div>
-          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Banco Cooperativo Sicredi · Agência 0001 · C/C 12345-6</p>
-        </div>
-      </section>
-
-      <section id="sec-notificacoes" class="hidden fade-in">
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div id="container-envio-notificacao" class="layout-formulario self-start hidden">
-            <h3 class="font-display font-bold text-brand-blue text-xl mb-6 flex items-center gap-3">
-              <div class="w-10 h-10 bg-brand-soft rounded-full flex items-center justify-center text-brand-blue border border-gray-200"><i data-lucide="bell-ring" class="w-4 h-4"></i></div>
-              Disparar Alerta
-            </h3>
-            <form id="form-notificacao" class="space-y-4">
-              <div>
-                <label class="layout-label">Membro Destinatário *</label>
-                <select id="select-notificacao-usuario" name="usuario" required class="layout-input bg-white cursor-pointer"></select>
-              </div>
-              <div>
-                <label class="layout-label">Mensagem *</label>
-                <textarea name="mensagem" required placeholder="Escreva o comunicado urgente..." class="layout-input h-32 resize-none"></textarea>
-              </div>
-              <div class="pt-2">
-                <button type="submit" class="layout-btn-enviar">Enviar Notificação</button>
-              </div>
-            </form>
-          </div>
-          <div id="container-caixa-notificacao" class="layout-card-mural xl:col-span-3 overflow-hidden self-start !p-0">
-            <div class="px-8 py-6 border-b border-gray-100 bg-white">
-              <h3 class="font-bold text-brand-blue text-sm uppercase tracking-wide">Minha Caixa de Mensagens</h3>
-            </div>
-            <div id="notificacoes-list-container" class="divide-y divide-gray-100 p-4"></div>
-          </div>
-        </div>
-      </section>
-
-      <section id="sec-relatorios" class="hidden fade-in">
-        <div class="bg-white p-10 rounded-3xl border border-gray-100 shadow-sm space-y-8">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-6">
+          <div id="card-simulador" class="layout-formulario self-start hidden space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-base">Simulador de Hierarquias</h3>
+            <p class="text-[11px] text-slate-400">Use para testar o que cada cargo pode ver no sistema.</p>
             <div>
-              <h3 class="font-display font-bold text-brand-blue text-3xl">Balanço Eclesiástico Anual</h3>
-              <p class="text-sm text-slate-500 mt-1">Indicadores de engajamento da comunidade</p>
+              <label class="layout-label">Selecione o Perfil</label>
+              <select id="select-teste-rank" class="layout-input bg-white"><option value="admin">👑 Administrador</option><option value="pastor">⛪ Pastor</option><option value="lider">👔 Líder de Ministério</option><option value="voluntario">🤝 Voluntário</option><option value="membro">🐑 Membro</option></select>
             </div>
-            <button onclick="window.print()" class="px-6 py-3 bg-brand-blue hover:bg-brand-light text-white text-sm font-bold rounded-full shadow-md flex items-center gap-2 transition-all hover:-translate-y-1">
-              <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Arquivo
-            </button>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="border border-gray-100 rounded-3xl p-8 bg-brand-soft text-center shadow-sm">
-              <p class="text-5xl font-bold text-brand-blue font-display">94%</p>
-              <p class="text-sm font-bold text-slate-700 mt-2 uppercase tracking-wide">Frequência</p>
-              <p class="text-xs text-slate-400 mt-1">Média de presença registrada nos check-ins</p>
-            </div>
-            <div class="border border-yellow-100 rounded-3xl p-8 bg-yellow-50 text-center shadow-sm">
-              <p class="text-5xl font-bold text-brand-gold font-display">12.4 <span class="text-2xl">kg</span></p>
-              <p class="text-sm font-bold text-slate-700 mt-2 uppercase tracking-wide">Doações Físicas</p>
-              <p class="text-xs text-slate-400 mt-1">Média de alimentos por membro ativo</p>
-            </div>
-            <div class="border border-gray-100 rounded-3xl p-8 bg-brand-soft text-center shadow-sm">
-              <p class="text-5xl font-bold text-brand-blue font-display">+32%</p>
-              <p class="text-sm font-bold text-slate-700 mt-2 uppercase tracking-wide">Voluntariado</p>
-              <p class="text-xs text-slate-400 mt-1">Novos servos ingressados este mês</p>
-            </div>
+            <button onclick="aplicarSimulacaoRank()" class="layout-btn-enviar bg-amber-500 hover:bg-amber-600 !py-3">Simular Visibilidade</button>
           </div>
         </div>
       </section>
+
+      <section id="sec-usuarios" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Novo Membro</h3>
+            <form id="form-usuario" class="space-y-4">
+              <div><label class="layout-label">Nome Completo *</label><input name="nome" required placeholder="Nome completo" class="layout-input" /></div>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="layout-label">E-mail *</label><input name="email" type="email" required placeholder="email@exemplo.com" class="layout-input" /></div>
+                <div><label class="layout-label">CPF *</label><input name="cpf" required placeholder="000.000.000-00" oninput="maskCPFField(event)" maxlength="14" class="layout-input" /></div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="layout-label">Telefone</label><input name="telefone" placeholder="(91) 90000-0000" oninput="maskPhoneField(event)" maxlength="15" class="layout-input" /></div>
+                <div><label class="layout-label">Gênero</label><select name="genero" class="layout-input bg-white"><option value="Masculino">Masculino</option><option value="Feminino">Feminino</option><option value="Outro">Outro</option></select></div>
+              </div>
+              <div><label class="layout-label">Cargo / Função</label><select id="select-funcao-usuario" name="funcao" class="layout-input bg-white"><option value="membro">🐑 Membro comum</option><option value="lider">👔 Líder de Ministério</option><option value="pastor">⛪ Pastor / Clero</option><option id="option-funcao-admin" value="admin">👑 Administrador</option></select></div>
+              <div><label class="layout-label">Senha Inicial de Acesso *</label><input name="senha" type="password" required placeholder="Defina a senha inicial do membro" class="layout-input" /></div>
+              <button type="submit" class="layout-btn-enviar">Cadastrar Usuário</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Comunidade Registrada</h3><span id="usuarios-count" class="text-xs font-bold text-brand-gold bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">—</span></div>
+            <div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Membro</th><th class="text-left">E-mail</th><th class="text-left">Telefone</th><th class="text-left">Função</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="usuarios-tbody"></tbody></table></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-eventos" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Novo Evento</h3>
+            <form id="form-evento" class="space-y-4">
+              <div><label class="layout-label">Título do Evento *</label><input name="titulo" required placeholder="Ex: Retiro Paroquial 2026" class="layout-input" /></div>
+              <div><label class="layout-label">Descrição</label><textarea name="descricao" placeholder="Detalhes da pauta..." class="layout-input h-20 resize-none"></textarea></div>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="layout-label">Categoria *</label><select id="select-evento-categoria" name="categoria" required class="layout-input bg-white"></select></div>
+                <div><label class="layout-label">Local *</label><select id="select-evento-local" name="local" required class="layout-input bg-white"></select></div>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div><label class="layout-label">Data *</label><input type="datetime-local" name="data" required class="layout-input bg-white" /></div>
+                <div><label class="layout-label">Capacidade *</label><input type="number" name="capacidade" required min="1" class="layout-input" /></div>
+              </div>
+              <div>
+                <label class="layout-label">Foto de Capa do Evento</label>
+                <input type="file" id="input-evento-imagem-upload" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer">
+              </div>
+              <button type="submit" class="layout-btn-enviar">Salvar Evento</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Agenda Oficial</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Título</th><th class="text-left">Data</th><th class="text-left">Vagas</th><th class="text-center w-24">Ações</th></tr></thead><tbody id="eventos-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-categorias" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Nova Categoria</h3>
+            <form id="form-categoria" class="space-y-4">
+              <div><label class="layout-label">Nome da Categoria *</label><input name="nome" required placeholder="Ex: Missas, Encontros" class="layout-input" /></div>
+              <div><label class="layout-label">Descrição</label><textarea name="descricao" class="layout-input h-20 resize-none"></textarea></div>
+              <button type="submit" class="layout-btn-enviar">Salvar</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Categorias Cadastradas</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Nome</th><th class="text-left">Descrição</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="categorias-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-locais" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg"><span id="titulo-form-local">Novo Espaço</span></h3>
+            <form id="form-local" class="space-y-4">
+              <div><label class="layout-label">Nome do Local *</label><input name="nome" required placeholder="Ex: Salão de Festas" class="layout-input" /></div>
+              <div><label class="layout-label">Lotação Máxima *</label><input type="number" name="capacidade" required min="1" class="layout-input" /></div>
+              <div class="border-t border-slate-100 pt-3 space-y-3">
+                <div><label class="layout-label">CEP *</label><input id="input-local-cep" name="cep" required placeholder="00000-000" class="layout-input font-mono" /></div>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="col-span-2"><label class="layout-label">Logradouro</label><input name="rua" readonly class="layout-input bg-slate-50" /></div>
+                  <div>
+                    <div class="flex justify-between items-center"><label class="layout-label !mb-0">Nº *</label><label class="text-[10px] text-slate-500 flex items-center gap-1 font-bold"><input type="checkbox" id="chk-local-sn" class="rounded border-slate-300 text-brand-blue w-3 h-3" />S/N</label></div>
+                    <input id="input-local-numero" name="numero" required class="layout-input mt-1" />
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                  <div><label class="layout-label">Bairro</label><input name="bairro" readonly class="layout-input bg-slate-50" /></div>
+                  <div><label class="layout-label">Cidade</label><input name="cidade" readonly class="layout-input bg-slate-50" /></div>
+                  <div><label class="layout-label">UF</label><input name="estado" readonly class="layout-input bg-slate-50 text-center uppercase" /></div>
+                </div>
+              </div>
+              <div id="mapa-local-container" class="w-full h-44 rounded-xl border border-gray-200 shadow-sm relative z-0"></div>
+              <div class="flex gap-2 pt-2"><button type="submit" class="layout-btn-enviar flex-1">Salvar Local</button><button type="button" id="btn-cancelar-local" class="px-4 border border-slate-200 text-slate-500 rounded-lg text-xs font-bold bg-white hidden">Cancelar</button></div>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Espaços Cadastrados</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Nome</th><th class="text-left">Lotação</th><th class="text-left">Município / UF</th><th class="text-center w-24">Ações</th></tr></thead><tbody id="locais-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-ministerios" class="hidden fade-in space-y-6">
+        <div id="banner-intuito-ministerio" class="bg-[#0c3b5e]/5 border border-[#0c3b5e]/10 p-6 rounded-3xl text-sm text-[#0c3b5e] leading-relaxed">
+          <h4 class="font-bold text-base mb-2 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i> Propósito dos Ministérios Paroquiais</h4>
+          <p class="mb-3 text-slate-600 font-medium">O intuito principal dos ministérios na igreja é servir, capacitar os membros para a obra de Deus e edificar o corpo de Cristo (a comunidade). A palavra deriva do latim e significa ofício de servo.</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium pt-1 text-slate-700">
+            <p><strong>✦ Aperfeiçoamento dos fiéis:</strong> Líderes e ministros existem para equipar os membros a usar seus dons e talentos naturais e espirituais.</p>
+            <p><strong>✦ Edificação e Crescimento:</strong> Trabalham juntos para promover a maturidade espiritual e a unidade da comunidade cristã.</p>
+            <p><strong>✦ Serviços Especializados:</strong> Dividem as tarefas da comunidade (ensino, louvor, acolhimento, evangelismo e ação social) para que a mensagem alcance a todos.</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Novo Ministério</h3>
+            <form id="form-ministerio" class="space-y-4">
+              <div><label class="layout-label">Nome do Ministério *</label><input name="nome" required class="layout-input" /></div>
+              <div><label class="layout-label">Finalidade</label><textarea name="descricao" class="layout-input h-20 resize-none"></textarea></div>
+              <button type="submit" class="layout-btn-enviar">Salvar Ministério</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Corpos Ministeriais</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Nome</th><th class="text-left">Descrição</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="ministerios-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-inscricoes" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div id="container-form-inscricao" class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Nova Inscrição</h3>
+            <form id="form-inscricao" class="space-y-4">
+              <div><label class="layout-label">Selecione o Evento *</label><select id="select-inscricao-evento" name="evento" required class="layout-input bg-white"></select></div>
+              <div id="box-select-inscricao-usuario"><label class="layout-label">Selecione o Membro *</label><select id="select-inscricao-usuario" name="usuario" class="layout-input bg-white"></select></div>
+              <button type="submit" class="layout-btn-enviar">Garantir Vaga</button>
+            </form>
+          </div>
+          <div id="container-tbl-inscricao" class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Lista de Presença / Check-in</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Fiel</th><th class="text-left">Evento</th><th class="text-center w-28">Chamada</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="inscricoes-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-voluntarios" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Escalar Servo</h3>
+            <form id="form-voluntario" class="space-y-4">
+              <div><label class="layout-label">Selecione o Evento *</label><select id="select-voluntario-evento" name="evento" required class="layout-input bg-white"></select></div>
+              <div><label class="layout-label">Selecione o Voluntário *</label><select id="select-voluntario-usuario" name="usuario" required class="layout-input bg-white"></select></div>
+              <div><label class="layout-label">Função / Equipe *</label><input name="funcao" required placeholder="Som, Recepção, Altar" class="layout-input" /></div>
+              <button type="submit" class="layout-btn-enviar">Escalar</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Escala Ativa</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Servo</th><th class="text-left">Evento</th><th class="text-left">Equipe</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="voluntarios-tbody"></tbody></table></div></div>
+        </div>
+      </section>
+
+      <section id="sec-comentarios" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Enviar Testemunho</h3>
+            <form id="form-comentario" class="space-y-4">
+              <div><label class="layout-label">Selecione o Evento *</label><select id="select-comentario-evento" name="evento" required class="layout-input bg-white"></select></div>
+              <div>
+                <label class="layout-label">Avaliação *</label>
+                <input type="hidden" id="input-comentario-avaliacao" name="avaliacao" value="5" required />
+                <div id="star-rating-container" class="flex items-center gap-1.5 text-slate-300 mt-1">
+                  <button type="button" data-star="1"><i data-lucide="star" class="w-5 h-5"></i></button>
+                  <button type="button" data-star="2"><i data-lucide="star" class="w-5 h-5"></i></button>
+                  <button type="button" data-star="3"><i data-lucide="star" class="w-5 h-5"></i></button>
+                  <button type="button" data-star="4"><i data-lucide="star" class="w-5 h-5"></i></button>
+                  <button type="button" data-star="5"><i data-lucide="star" class="w-5 h-5"></i></button>
+                </div>
+              </div>
+              <div><label class="layout-label">Sua Mensagem *</label><textarea name="mensagem" required placeholder="Escreva aqui..." class="layout-input h-24 resize-none"></textarea></div>
+              <button type="submit" class="layout-btn-enviar">Publicar no Mural</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 space-y-4 max-h-[600px] overflow-y-auto" id="comentarios-mural-container"></div>
+        </div>
+      </section>
+
+      <section id="sec-doacoes" class="hidden fade-in space-y-6">
+        <div id="view-financeiro-admin" class="grid grid-cols-1 xl:grid-cols-3 gap-6 hidden">
+          <div class="layout-formulario self-start space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Lançamento de Caixa</h3>
+            <form id="form-doacao" class="space-y-4">
+              <div><label class="layout-label">Evento Vinculado</label><select id="select-doacao-evento" name="evento" class="layout-input bg-white"></select></div>
+              <div><label class="layout-label">Categoria *</label><select name="tipo" required class="layout-input bg-white"><option value="dinheiro">💵 Dízimo / Oferta</option><option value="alimento">🍞 Cesta Básica / Donativos</option><option value="ingresso">🎟️ Ingressos Retiro</option></select></div>
+              <div><label class="layout-label">Montante / Valor *</label><input type="number" name="valor" step="0.01" required placeholder="0.00" class="layout-input" /></div>
+              <div><label class="layout-label">Observações</label><input name="descricao" placeholder="Histórico" class="layout-input" /></div>
+              <button type="submit" class="layout-btn-enviar">Registrar Entrada</button>
+            </form>
+          </div>
+          <div class="layout-card-mural xl:col-span-2 !p-0 overflow-hidden self-start"><div class="px-6 py-4 border-b border-slate-100 bg-white"><h3 class="font-bold text-brand-blue text-xs uppercase tracking-wider">Histórico de Movimentações</h3></div><div class="overflow-x-auto"><table class="w-full tabela"><thead><tr><th class="text-left">Histórico</th><th class="text-left">Tipo</th><th class="text-left">Líquido</th><th class="text-center w-20">Ações</th></tr></thead><tbody id="doacoes-tbody"></tbody></table></div></div>
+        </div>
+        <div id="view-financeiro-membro" class="max-w-md mx-auto bg-white border border-slate-200 rounded-2xl p-8 shadow-sm text-center space-y-6 hidden">
+          <div class="w-14 h-14 bg-amber-50 border border-amber-200 text-brand-gold rounded-full flex items-center justify-center mx-auto"><i data-lucide="qr-code" class="w-6 h-6"></i></div>
+          <div><h3 class="font-display font-bold text-brand-blue text-2xl">Contribuições Paroquiais</h3><p class="text-xs text-slate-500 mt-1">Seu dízimo e oferta financiam os trabalhos sociais.</p></div>
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-sm font-bold text-brand-blue cursor-pointer select-all select-none">pix@igrejanovavida.com.br</div>
+          <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Sicredi · Ag: 0001 · C/C: 12345-6</p>
+        </div>
+      </section>
+
+      <section id="sec-notificacoes" class="hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div id="container-envio-notificacao" class="layout-formulario self-start hidden space-y-4">
+            <h3 class="font-display font-bold text-brand-blue text-lg">Disparar Alerta</h3>
+            <form id="form-notificacao" class="space-y-4">
+              <div><label class="layout-label">Membro Destinatário *</label><select id="select-notificacao-usuario" name="usuario" required class="layout-input bg-white"></select></div>
+              <div><label class="layout-label">Mensagem Urgente *</label><textarea name="mensagem" required class="layout-input h-28 resize-none"></textarea></div>
+              <button type="submit" class="layout-btn-enviar">Disparar Notificação</button>
+            </form>
+          </div>
+          <div id="notificacoes-list-container" class="layout-card-mural xl:col-span-3 !p-0 overflow-hidden self-start bg-white divide-y divide-slate-100"></div>
+        </div>
+      </section>
+
+      <section id="sec-relatorios" class="hidden fade-in space-y-6"></section>
 
     </main>
   </div>
 </div>
-
 <script src="dashboard.js"></script>
-
-<script>
-    function maskPhone(e) {
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
-        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-    }
-</script>
-
-<script>
-  lucide.createIcons();
-</script>
 </body>
 </html>

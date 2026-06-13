@@ -36,7 +36,8 @@ roteador.post("/", autenticar, async (req, res) => {
       });
     }
 
-    if (!eventoEncontrado.inscricoesAbertas) {
+    const agora = new Date();
+    if (new Date(eventoEncontrado.data) < agora) {
       return res.status(400).json({
         erro: "As inscrições deste evento estão encerradas"
       });
@@ -333,5 +334,6 @@ roteador.delete(
     }
   }
 );
+
 
 module.exports = roteador;
